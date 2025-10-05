@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Profile - JobAlign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <style>
+        /* 1. Global Reset and Variables */
+        :root {
+            --color-primary: #2563EB; /* Blue */
+            --color-primary-light: #EFF6FF;
+            --color-dark: #0F172A;   /* Dark Blue/Black for text */
+            --color-secondary: #64748B; /* Gray for body text */
+            --color-light: #F8FAFC;   /* Light gray for backgrounds */
+            --color-white: #FFFFFF;
+            --color-border: #E2E8F0;
+            --color-success: #16A34A;
+            --color-success-light: #F0FDF4;
+            
+            --font-family-sans: 'Inter', sans-serif;
+            --border-radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-light);
+            color: var(--color-secondary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* 2. Header / Navbar */
+        .header {
+            background-color: var(--color-white); padding: 1rem 1.5rem;
+            box-shadow: var(--shadow); position: sticky; top: 0; z-index: 1000;
+        }
+        .navbar {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem; font-size: 1.5rem;
+            font-weight: 700; color: var(--color-dark); text-decoration: none;
+        }
+        .logo i { color: var(--color-primary); }
+        .main-nav ul { display: none; list-style: none; gap: 2rem; }
+        .main-nav a {
+            font-weight: 500; color: var(--color-secondary); transition: var(--transition-fast);
+            text-decoration: none; padding-bottom: 0.5rem;
+        }
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--color-primary); border-bottom: 2px solid var(--color-primary);
+        }
+        .profile-icon img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+        .menu-toggle { display: block; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-dark); }
+        @media (min-width: 992px) {
+            .main-nav ul { display: flex; }
+            .menu-toggle { display: none; }
+        }
+
+        /* 3. Main Layout & Card */
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        @media (min-width: 992px) {
+            .profile-layout { grid-template-columns: 1fr 2fr; }
+        }
+
+        .card {
+            background-color: var(--color-white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        .card-header {
+            padding-bottom: 1rem; margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .card-header h1, .card-header h2 { color: var(--color-dark); }
+
+        /* 4. Profile Summary Card (Left) */
+        .profile-summary-card { text-align: center; }
+        .company-logo {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+        }
+        .company-logo img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 4px solid var(--color-white);
+            box-shadow: var(--shadow);
+            object-fit: cover;
+        }
+        .edit-logo-btn {
+            position: absolute; bottom: 5px; right: 5px;
+            width: 35px; height: 35px;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border: 2px solid var(--color-white);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: var(--transition-fast);
+        }
+        .edit-logo-btn:hover { transform: scale(1.1); }
+        #company-name-display { color: var(--color-dark); font-size: 1.5rem; font-weight: 700; }
+        #recruiter-name-display { font-size: 1.1rem; }
+
+        /* 5. Profile Form (Right) */
+        .form-section-header {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-dark);
+            margin-bottom: 1.5rem;
+            margin-top: 2rem;
+        }
+        .form-section-header:first-of-type { margin-top: 0; }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+        @media (min-width: 768px) {
+            .form-grid { grid-template-columns: 1fr 1fr; }
+        }
+        .form-group label {
+            display: block; margin-bottom: 0.5rem;
+            font-weight: 500; color: var(--color-dark);
+        }
+        .form-group input, .form-group select {
+            width: 100%; padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem; font-size: 1rem;
+        }
+        .form-actions {
+            display: flex; justify-content: flex-end; gap: 1rem;
+            margin-top: 2rem; padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+        }
+        .btn {
+            padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition-fast); border: 1px solid transparent;
+            text-decoration: none; display: inline-block; font-size: 1rem;
+        }
+        .btn-primary { background-color: var(--color-primary); color: var(--color-white); border-color: var(--color-primary); }
+        .btn-primary:hover { background-color: #1D4ED8; }
+        .btn-secondary { background-color: var(--color-white); color: var(--color-dark); border-color: var(--color-border); }
+        .btn-secondary:hover { border-color: var(--color-primary); }
+        
+        /* 6. Success Message */
+        .alert-success {
+            display: none;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--color-success-light);
+            color: var(--color-success);
+            border: 1px solid var(--color-success);
+            border-radius: var(--border-radius);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="navbar">
+            <a href="recruiter-dashboard.html" class="logo"><i class="fa-solid fa-check-double"></i><span>JobAlign</span></a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="recruiter-dashboard.html">Dashboard</a></li>
+                    <li><a href="postjob.html">Post Job</a></li>
+                    <li><a href="applicants.html">Applicants</a></li>
+                    <li><a href="#" class="active">Profile</a></li>
+                    <li><a href="settings.html">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="profile-icon"><img src="..\data\images\Mahi.jpg" alt="Profile"></div>
+            <button class="menu-toggle" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="profile-layout">
+            <!-- Left Column: Profile Summary -->
+            <aside>
+                <div class="card profile-summary-card">
+                    <div class="company-logo">
+                        <img id="company-logo-img" src="https://placehold.co/120x120/E2E8F0/475569?text=Logo" alt="Company Logo">
+                        <label for="logo-upload" class="edit-logo-btn" title="Change logo">
+                            <i class="fas fa-camera"></i>
+                        </label>
+                        <input type="file" id="logo-upload" accept="image/*" style="display: none;">
+                    </div>
+                    <h2 id="company-name-display"></h2>
+                    <p id="recruiter-name-display"></p>
+                    <p id="recruiter-role-display"></p>
+                </div>
+            </aside>
+
+            <!-- Right Column: Profile Details Form -->
+            <section>
+                <form class="card" id="profile-form">
+                    <div class="card-header">
+                        <h1>Recruiter Profile</h1>
+                        <p>Manage your company and personal information.</p>
+                    </div>
+
+                    <div id="success-alert" class="alert-success">
+                        <i class="fas fa-check-circle"></i> Profile updated successfully!
+                    </div>
+                    
+                    <h2 class="form-section-header">Company Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group"><label for="company-name">Company Name</label><input type="text" id="company-name"></div>
+                        <div class="form-group"><label for="industry">Industry</label><input type="text" id="industry"></div>
+                        <div class="form-group"><label for="company-size">Company Size</label><input type="text" id="company-size"></div>
+                        <div class="form-group"><label for="website">Company Website</label><input type="url" id="website"></div>
+                        <div class="form-group"><label for="linkedin">LinkedIn Profile</label><input type="url" id="linkedin"></div>
+                        <div class="form-group"><label for="cin">CIN Number</label><input type="text" id="cin"></div>
+                    </div>
+                     <div class="form-group" style="margin-top: 1.25rem">
+                        <label for="employer-id">Employer ID (Document)</label>
+                        <input type="file" id="employer-id">
+                    </div>
+
+                    <h2 class="form-section-header">Recruiter Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group"><label for="recruiter-name">Full Name</label><input type="text" id="recruiter-name"></div>
+                        <div class="form-group"><label for="recruiter-role">Position / Role</label><input type="text" id="recruiter-role"></div>
+                        <div class="form-group"><label for="recruiter-email">Work Email</label><input type="email" id="recruiter-email"></div>
+                        <div class="form-group"><label for="recruiter-contact">Contact Number</label><input type="tel" id="recruiter-contact"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- MOCK DATA ---
+            const recruiterData = {
+                companyName: "Tech Solutions Inc.",
+                industry: "Information Technology",
+                companySize: "201-500 employees",
+                website: "https://techsolutions.example.com",
+                linkedin: "https://linkedin.com/company/techsolutions",
+                cin: "U72900KA2010PTC053748",
+                recruiterName: "Aarav Sharma",
+                recruiterRole: "Senior HR Manager",
+                recruiterEmail: "aarav.sharma@techsolutions.example.com",
+                recruiterContact: "+91-9876543210",
+                logoUrl: "https://placehold.co/120x120/2563EB/FFFFFF?text=TS"
+            };
+
+            // --- DOM Elements ---
+            const form = document.getElementById('profile-form');
+            const successAlert = document.getElementById('success-alert');
+
+            // --- FUNCTIONS ---
+            function populateProfile(data) {
+                // Populate summary card
+                document.getElementById('company-logo-img').src = data.logoUrl;
+                document.getElementById('company-name-display').textContent = data.companyName;
+                document.getElementById('recruiter-name-display').textContent = data.recruiterName;
+                document.getElementById('recruiter-role-display').textContent = data.recruiterRole;
+
+                // Populate form fields
+                document.getElementById('company-name').value = data.companyName;
+                document.getElementById('industry').value = data.industry;
+                document.getElementById('company-size').value = data.companySize;
+                document.getElementById('website').value = data.website;
+                document.getElementById('linkedin').value = data.linkedin;
+                document.getElementById('cin').value = data.cin;
+                document.getElementById('recruiter-name').value = data.recruiterName;
+                document.getElementById('recruiter-role').value = data.recruiterRole;
+                document.getElementById('recruiter-email').value = data.recruiterEmail;
+                document.getElementById('recruiter-contact').value = data.recruiterContact;
+            }
+
+            // --- EVENT LISTENERS ---
+            
+            // Handle form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Simulate saving data
+                console.log("Saving profile data...");
+                
+                // Update display data from form (optional, for visual feedback)
+                recruiterData.companyName = document.getElementById('company-name').value;
+                recruiterData.recruiterName = document.getElementById('recruiter-name').value;
+                recruiterData.recruiterRole = document.getElementById('recruiter-role').value;
+                
+                populateProfile(recruiterData); // Re-populate to show changes in summary
+                
+                // Show success message
+                successAlert.style.display = 'block';
+                window.scrollTo(0, 0); // Scroll to top to make sure user sees the message
+                
+                // Hide message after a few seconds
+                setTimeout(() => {
+                    successAlert.style.display = 'none';
+                }, 4000);
+            });
+
+            // Handle company logo upload
+            const logoUploadInput = document.getElementById('logo-upload');
+            const logoImg = document.getElementById('company-logo-img');
+            
+            logoUploadInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const newLogoUrl = event.target.result;
+                        logoImg.src = newLogoUrl;
+                        recruiterData.logoUrl = newLogoUrl; // Update data object
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // --- INITIALIZATION ---
+            populateProfile(recruiterData);
+        });
+    </script>
+</body>
+</html>

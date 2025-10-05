@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seeker - JobAlign</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* 1. Global Variables and Reset (from JobAlign branding) */
+        :root {
+            --color-primary: #1E293B;
+            --color-secondary: #fff;
+            --color-accent: #2563EB;
+            --color-text: #475569;
+            --color-light-bg: #F8FAFC;
+            --color-border: #E2E8F0;
+            --color-highlight: #0F172A;
+
+            --font-family-sans: 'Inter', sans-serif;
+
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2.5rem;
+            --space-xl: 4rem;
+
+            --border-radius-md: 0.5rem;
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-light-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: var(--space-lg);
+        }
+
+        /* 2. Main Layout and Container */
+        .entry-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--color-secondary);
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            border: 1px solid var(--color-border);
+            padding: var(--space-xl);
+            text-align: center;
+        }
+
+        /* 3. Page Header */
+        .page-header {
+            margin-bottom: var(--space-lg);
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-highlight);
+            margin-bottom: var(--space-sm);
+        }
+
+        .page-header p {
+            font-size: 1.125rem;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        /* 4. Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid transparent;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+        }
+
+        .btn--primary {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            border-color: var(--color-primary);
+        }
+
+        .btn--primary:hover {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn--secondary {
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+            border-color: var(--color-border);
+        }
+        
+        .btn--secondary:hover {
+            background-color: var(--color-light-bg);
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+        
+        /* 5. Responsive Design */
+        @media (max-width: 640px) {
+            body {
+                padding: 0;
+                align-items: flex-start;
+                background-color: var(--color-secondary);
+            }
+            .entry-container {
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                padding: var(--space-xl) var(--space-md);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="entry-container">
+        <header class="page-header">
+            <h1>Find Your Next Opportunity</h1>
+            <p>Join JobAlign to connect with top employers and discover jobs tailored to you.</p>
+        </header>
+
+        <div class="action-buttons">
+            <a href="registerforjobseeker.html" class="btn btn--primary" id="registerBtn">Register (New User)</a>
+            <a href="loginforjobseeker.html" class="btn btn--secondary" id="loginBtn">Login (Existing User)</a>
+        </div>
+    </div>
+
+   
+
+</body>
+</html>

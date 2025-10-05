@@ -1,0 +1,568 @@
+/*
+ * JobAlign Stylesheet
+ * -------------------
+ * Professional, modern, and responsive styling using Flexbox and Grid.
+ * Includes all necessary variable definitions and styles for single-page navigation.
+ */
+
+/* 1. Global Reset and Variables */
+:root {
+    /* Color Palette */
+    --color-primary: #1E293B; /* Dark Blue/Black for primary actions and text */
+    --color-secondary: #fff; /* White for background */
+    --color-accent: #2563EB; /* Vibrant Blue for highlights and links */
+    --color-text: #475569; /* Gray for body text */
+    --color-light-bg: #F8FAFC; /* Very light gray for section backgrounds */
+    --color-border: #E2E8F0; /* Light gray for borders/separators */
+    --color-highlight: #0F172A; /* Darker shade for titles */
+
+    /* Typography */
+    --font-family-sans: 'Inter', sans-serif;
+    --font-size-base: 1rem;
+
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2.5rem;
+    --space-xl: 4rem;
+    --space-xxl: 6rem;
+
+    /* Border Radius */
+    --border-radius-sm: 0.25rem;
+    --border-radius-md: 0.5rem;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease-in-out;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family-sans);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-secondary);
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--color-accent);
+}
+
+h1, h2, h3 {
+    color: var(--color-highlight);
+    line-height: 1.2;
+}
+
+/* 2. Utility Classes */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+}
+
+.bg-light {
+    background-color: var(--color-light-bg);
+}
+
+.text-highlight {
+    color: var(--color-primary);
+    font-weight: 800;
+}
+
+/* 3. Button Styling */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.btn--primary {
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    border-color: var(--color-primary);
+}
+
+.btn--primary:hover {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn--secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    border-color: var(--color-border);
+}
+
+.btn--secondary:hover {
+    background-color: var(--color-light-bg);
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.btn--large {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+}
+
+/* 4. Header and Navigation */
+.header {
+    background-color: var(--color-secondary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) var(--space-md);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    gap: 0.5rem;
+}
+
+.logo i {
+    color: var(--color-accent);
+}
+
+.nav__list {
+    display: flex;
+    list-style: none;
+    gap: var(--space-lg);
+}
+
+.nav__link {
+    font-weight: 500;
+    padding: 0.5rem 0;
+    position: relative;
+    color: var(--color-text);
+}
+
+.nav__link:hover, .nav__link--active {
+    color: var(--color-accent);
+}
+
+.nav__link--active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--color-accent);
+    border-radius: 2px;
+}
+
+.header__actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-primary);
+}
+
+/* Mobile Navigation */
+.mobile-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(30, 41, 59, 0.95);
+    z-index: 1001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+}
+
+.mobile-nav-overlay.open {
+    transform: translateX(0);
+}
+
+.nav__list--mobile {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xl);
+}
+
+.nav__link--mobile {
+    color: var(--color-secondary);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.close-menu {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    background: none;
+    border: none;
+    color: var(--color-secondary);
+    font-size: 2.5rem;
+    cursor: pointer;
+}
+
+/* 5. Hero Section */
+.hero-section {
+    text-align: center;
+    padding: var(--space-xxl) 0;
+    background: linear-gradient(180deg, var(--color-light-bg) 0%, var(--color-secondary) 100%);
+}
+
+.hero__title {
+    font-size: 5rem;
+    font-weight: 800;
+    margin-bottom: var(--space-md);
+}
+
+.hero__subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text);
+    margin-bottom: var(--space-xl);
+}
+
+.hero__actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.hero__features {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap: var(--space-xl);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.hero__features li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.hero__features i {
+    color: var(--color-accent);
+}
+
+/* 6. Features Section */
+.features-section {
+    padding: var(--space-xxl) 0;
+    text-align: center;
+}
+
+.section__title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: var(--space-sm);
+}
+
+.section__subtitle {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-xl);
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+}
+
+.feature-card {
+    background-color: var(--color-secondary);
+    padding: var(--space-xl);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    border: 1px solid var(--color-border);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-accent);
+}
+
+/* 7. CTA Section */
+.cta-section {
+    padding: var(--space-xxl) 0;
+    text-align: center;
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+}
+
+.cta__title, .cta-section h2 {
+    color: var(--color-secondary);
+}
+
+.cta__subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: var(--space-lg);
+}
+
+.cta__actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+}
+.cta-section .btn--primary {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    border-color: var(--color-secondary);
+}
+.cta-section .btn--primary:hover {
+    background-color: var(--color-light-bg);
+}
+.cta-section .btn--secondary {
+    background-color: transparent;
+    color: var(--color-secondary);
+    border-color: var(--color-secondary);
+}
+.cta-section .btn--secondary:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+}
+
+
+/* 8. Footer */
+.footer {
+    background-color: var(--color-secondary);
+    padding: var(--space-lg) 0;
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+}
+.footer__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+}
+.footer__links {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+}
+.footer__copyright {
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+
+/* 9. Inline Page Navigation & New Sections */
+.page-section {
+    padding: var(--space-xxl) 0;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.page-section.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-section {
+    max-width: 800px; /* Constrain width for readability */
+    text-align: center;
+    margin: 0 auto;
+}
+
+.content-section .section__title {
+    margin-bottom: var(--space-sm);
+}
+
+.content-section .section__subtitle {
+    margin-bottom: var(--space-xl);
+}
+
+/* About Section Specifics */
+.about-content h3 {
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    text-align: left;
+}
+
+.about-content p {
+    text-align: left;
+    margin-bottom: var(--space-md);
+}
+
+/* Careers Section Specifics */
+.careers-content h3 {
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    text-align: center;
+}
+
+.careers-content > p { /* Target direct child to avoid affecting job-card p */
+    margin-bottom: var(--space-lg);
+}
+
+.job-card {
+    background-color: var(--color-secondary);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+    text-align: left;
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
+    border-color: var(--color-accent);
+}
+
+.job-card h4 {
+    font-size: 1.2rem;
+    color: var(--color-highlight);
+    margin-bottom: var(--space-xs);
+}
+
+.job-card span {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+}
+
+/* Contact Form Styling */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: var(--space-xs);
+    font-weight: 600;
+    color: var(--color-highlight);
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    font-family: var(--font-family-sans);
+    font-size: 1rem;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.contact-form .btn {
+    align-self: flex-start; /* Align button to the left */
+    margin-top: var(--space-sm);
+}
+
+
+/* 10. Media Queries for Responsiveness */
+
+/* Tablet and Smaller Desktop */
+@media (max-width: 1024px) {
+    .nav__list {
+        gap: var(--space-md);
+    }
+    .hero__title {
+        font-size: 2.5rem;
+    }
+}
+
+/* Mobile Devices */
+@media (max-width: 768px) {
+    .nav, .header__actions {
+        display: none;
+    }
+    .menu-toggle {
+        display: block;
+    }
+    .hero-section, .features-section, .cta-section, .page-section {
+        padding: var(--space-xl) var(--space-sm);
+    }
+    .hero__title, .section__title, .cta__title {
+        font-size: 2rem;
+    }
+    .hero__actions, .cta__actions {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+    .hero__features {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+    .careers-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+

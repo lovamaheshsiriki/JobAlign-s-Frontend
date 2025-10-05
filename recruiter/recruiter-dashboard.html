@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Dashboard - JobAlign</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    
+    <style>
+        /* 1. Global Reset and Variables */
+        :root {
+            --color-primary: #2563EB; /* Blue */
+            --color-primary-light: #EFF6FF;
+            --color-dark: #0F172A;   /* Dark Blue/Black for text */
+            --color-secondary: #64748B; /* Gray for body text */
+            --color-light: #F8FAFC;   /* Light gray for backgrounds */
+            --color-white: #FFFFFF;
+            --color-border: #E2E8F0;
+            --color-success: #22C55E;
+            --color-warning: #F59E0B;
+            --color-danger-text: #991B1B;
+            --color-danger-bg: #FEE2E2;
+            
+            --font-family-sans: 'Inter', sans-serif;
+            --border-radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-light);
+            color: var(--color-secondary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* 2. Header / Navbar */
+        .header {
+            background-color: var(--color-white);
+            padding: 1rem 1.5rem;
+            box-shadow: var(--shadow);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .navbar {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem; font-size: 1.5rem;
+            font-weight: 700; color: var(--color-dark); text-decoration: none;
+        }
+        .logo i { color: var(--color-primary); }
+        .main-nav ul { display: none; list-style: none; gap: 2rem; }
+        .main-nav a {
+            font-weight: 500; color: var(--color-secondary); transition: var(--transition-fast);
+            text-decoration: none; padding-bottom: 0.5rem;
+        }
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--color-primary); border-bottom: 2px solid var(--color-primary);
+        }
+        .profile-icon img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+        .menu-toggle { display: block; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-dark); }
+        @media (min-width: 992px) {
+            .main-nav ul { display: flex; }
+            .menu-toggle { display: none; }
+        }
+
+        /* 3. Main Dashboard Layout & Cards */
+        .card {
+            background-color: var(--color-white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition-fast);
+        }
+        .card:hover { transform: translateY(-3px); }
+        .card-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1rem;
+        }
+        .card-header h2 { font-size: 1.25rem; color: var(--color-dark); }
+        
+        .btn {
+            padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition-fast); border: 1px solid transparent;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-primary { background-color: var(--color-primary); color: var(--color-white); }
+        .btn-primary:hover { background-color: #1D4ED8; }
+
+        /* 4. Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--color-primary), #60A5FA);
+            color: var(--color-white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+        .welcome-banner h1 { font-size: 2rem; }
+        .welcome-banner p { opacity: 0.9; }
+
+        /* 5. Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .stat-card .icon {
+            font-size: 1.75rem;
+            color: var(--color-primary);
+            background-color: var(--color-primary-light);
+            width: 60px; height: 60px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+        }
+        .stat-card .value { font-size: 2rem; font-weight: 700; color: var(--color-dark); }
+        .stat-card .label { font-size: 0.9rem; }
+
+        /* 6. Recent Jobs & Applicants Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 992px) {
+            .dashboard-grid { grid-template-columns: 1fr 1fr; }
+        }
+        
+        /* 7. Table Styles */
+        .table-wrapper { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th, td { padding: 1rem 0.75rem; border-bottom: 1px solid var(--color-border); }
+        th { font-weight: 600; color: var(--color-dark); }
+        td .applicant-info { display: flex; align-items: center; gap: 0.75rem; }
+        td .applicant-info img { width: 40px; height: 40px; border-radius: 50%; }
+        td h3 { font-size: 1rem; color: var(--color-dark); margin: 0; }
+        td p { font-size: 0.9rem; margin: 0; }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem; border-radius: 999px;
+            font-weight: 600; font-size: 0.8rem;
+        }
+        .status-active { background-color: var(--color-success); color: var(--color-white); }
+        .status-closed { background-color: var(--color-danger-bg); color: var(--color-danger-text); }
+        .status-pending { background-color: var(--color-warning); color: var(--color-white); }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="navbar">
+            <a href="../index.html" class="logo"><i class="fa-solid fa-check-double"></i><span>JobAlign</span></a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#" class="active">Dashboard</a></li>
+                    <li><a href="postjob.html">Post Job</a></li>
+                    <li><a href="applicants.html">Applicants</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="settings.html">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="profile-icon"><a href="profile.html"><img src="..\data\images\mahi.jpg" alt="Profile"></a></div>
+            <button class="menu-toggle" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h1>Welcome back, Tech Solutions Inc.</h1>
+            <p>Here's a summary of your recruitment activity.</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid" id="stats-grid">
+            <!-- Stats cards will be rendered by JS -->
+        </div>
+
+        <!-- Recent Jobs & Applicants -->
+        <div class="dashboard-grid">
+            <!-- Recent Job Posts -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Job Posts</h2>
+                    <a href="#" class="btn btn-primary">View All</a>
+                </div>
+                <div class="table-wrapper">
+                    <table id="recent-jobs-table">
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Date Posted</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Job rows will be rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Applicants -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Applicants</h2>
+                    <a href="#" class="btn btn-primary">View All</a>
+                </div>
+                 <div class="table-wrapper">
+                    <table id="recent-applicants-table">
+                        <thead>
+                            <tr>
+                                <th>Applicant</th>
+                                <th>Applied For</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Applicant rows will be rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- MOCK DATA ---
+            const statsData = [
+                { id: 'total-jobs', label: 'Total Jobs Posted', value: 24, icon: 'fa-briefcase' },
+                { id: 'active-jobs', label: 'Active Jobs', value: 5, icon: 'fa-bullhorn' },
+                { id: 'total-applicants', label: 'Total Applicants', value: 312, icon: 'fa-users' },
+                { id: 'shortlisted', label: 'Shortlisted', value: 28, icon: 'fa-user-check' },
+            ];
+            
+            const recentJobsData = [
+                { title: 'Senior Frontend Developer', date: '2025-10-02', status: 'Active' },
+                { title: 'Product Designer', date: '2025-09-28', status: 'Active' },
+                { title: 'DevOps Engineer', date: '2025-09-25', status: 'Closed' },
+                { title: 'Data Scientist', date: '2025-09-20', status: 'Active' },
+            ];
+
+            const recentApplicantsData = [
+                { name: 'Priya Sharma', avatar: 'https://i.pravatar.cc/150?u=priya', job: 'Senior Frontend Developer', status: 'Shortlisted' },
+                { name: 'Rohan Verma', avatar: 'https://i.pravatar.cc/150?u=rohan', job: 'Product Designer', status: 'Pending' },
+                { name: 'Anjali Mehta', avatar: 'https://i.pravatar.cc/150?u=anjali', job: 'DevOps Engineer', status: 'Shortlisted' },
+                { name: 'Vikram Singh', avatar: 'https://i.pravatar.cc/150?u=vikram', job: 'Data Scientist', status: 'Pending' },
+            ];
+
+            // --- DOM Elements ---
+            const statsGrid = document.getElementById('stats-grid');
+            const jobsTableBody = document.querySelector('#recent-jobs-table tbody');
+            const applicantsTableBody = document.querySelector('#recent-applicants-table tbody');
+
+            // --- RENDER FUNCTIONS ---
+            const renderStats = () => {
+                statsGrid.innerHTML = statsData.map(stat => `
+                    <div class="stat-card card" id="${stat.id}">
+                        <div class="icon"><i class="fas ${stat.icon}"></i></div>
+                        <div class="info">
+                            <span class="value">${stat.value}</span>
+                            <p class="label">${stat.label}</p>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            const renderRecentJobs = () => {
+                jobsTableBody.innerHTML = recentJobsData.map(job => `
+                    <tr>
+                        <td>
+                            <h3>${job.title}</h3>
+                        </td>
+                        <td>${job.date}</td>
+                        <td>
+                            <span class="status-badge status-${job.status.toLowerCase()}">${job.status}</span>
+                        </td>
+                    </tr>
+                `).join('');
+            };
+            
+            const renderRecentApplicants = () => {
+                applicantsTableBody.innerHTML = recentApplicantsData.map(applicant => `
+                    <tr>
+                        <td>
+                            <div class="applicant-info">
+                                <img src="${applicant.avatar}" alt="${applicant.name}">
+                                <div>
+                                    <h3>${applicant.name}</h3>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p>${applicant.job}</p>
+                        </td>
+                        <td>
+                             <span class="status-badge status-${applicant.status.toLowerCase()}">${applicant.status}</span>
+                        </td>
+                    </tr>
+                `).join('');
+            };
+
+            // --- INITIALIZATION ---
+            renderStats();
+            renderRecentJobs();
+            renderRecentApplicants();
+        });
+    </script>
+</body>
+</html>

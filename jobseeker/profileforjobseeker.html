@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - JobAlign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <style>
+        /* 1. Global Reset and Variables */
+        :root {
+            --color-primary: #2563EB; /* Blue */
+            --color-primary-light: #EFF6FF;
+            --color-dark: #0F172A;   /* Dark Blue/Black for text */
+            --color-secondary: #64748B; /* Gray for body text */
+            --color-light-gray: #F1F5F9; 
+            --color-bg: #F8FAFC;
+            --color-white: #FFFFFF;
+            --color-border: #E2E8F0;
+            --color-danger: #DC2626;
+            
+            --font-family-sans: 'Inter', sans-serif;
+            --border-radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-bg);
+            color: var(--color-secondary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* 2. Header / Navbar */
+        .header {
+            background-color: var(--color-white);
+            padding: 1rem 1.5rem;
+            box-shadow: var(--shadow);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .navbar {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 1.5rem; font-weight: 700; color: var(--color-dark); text-decoration: none;
+        }
+        .logo i { color: var(--color-primary); }
+        .main-nav ul { display: none; list-style: none; gap: 2rem; }
+        .main-nav a {
+            font-weight: 500; color: var(--color-secondary); transition: var(--transition-fast);
+            text-decoration: none; padding-bottom: 0.5rem;
+        }
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--color-primary); border-bottom: 2px solid var(--color-primary);
+        }
+        .profile-icon img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+        .menu-toggle { display: block; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-dark); }
+        @media (min-width: 768px) {
+            .main-nav ul { display: flex; }
+            .menu-toggle { display: none; }
+        }
+
+        /* 3. Main Profile Layout */
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 1024px) {
+            .profile-layout { grid-template-columns: 2fr 1fr; }
+        }
+
+        /* 4. Reusable Card Component */
+        .card {
+            background-color: var(--color-white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        .card-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1rem;
+        }
+        .card-header h2 { color: var(--color-dark); font-size: 1.25rem; }
+        
+        /* 5. Buttons */
+        .btn {
+            padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition-fast); border: 1px solid transparent;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-primary { background-color: var(--color-primary); color: var(--color-white); border-color: var(--color-primary); }
+        .btn-primary:hover { background-color: #1D4ED8; border-color: #1D4ED8; }
+        .btn-secondary { background-color: var(--color-white); color: var(--color-dark); border-color: var(--color-border); }
+        .btn-secondary:hover { border-color: var(--color-primary); color: var(--color-primary); }
+        .btn-danger { background-color: var(--color-danger); color: var(--color-white); border-color: var(--color-danger); }
+        .btn-icon { background: none; border: none; color: var(--color-secondary); cursor: pointer; font-size: 1rem; padding: 0.5rem; }
+        .btn-icon:hover { color: var(--color-primary); }
+
+        /* 6. Profile Header Card */
+        .profile-header-card { display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
+        @media (min-width: 640px) {
+            .profile-header-card { flex-direction: row; text-align: left; }
+        }
+        .profile-picture { position: relative; }
+        .profile-picture img { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--color-white); box-shadow: var(--shadow); }
+        .profile-picture .edit-pic {
+            position: absolute; bottom: 5px; right: 5px; background-color: var(--color-primary);
+            color: var(--color-white); width: 30px; height: 30px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .profile-info h1 { color: var(--color-dark); }
+        .profile-info p { margin-bottom: 0.25rem; }
+        .profile-contact-info { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-content: center; }
+        @media (min-width: 640px) { .profile-contact-info { justify-content: flex-start; } }
+        .profile-header-card .edit-profile-btn { margin-top: 1rem; }
+        @media (min-width: 640px) { .profile-header-card .edit-profile-btn { margin-left: auto; margin-top: 0; } }
+
+        /* 7. Experience, Education & Skills List Items */
+        .list-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-light-gray); }
+        .list-item:last-child { border-bottom: none; }
+        .list-item-content { flex-grow: 1; }
+        .list-item-content h3 { color: var(--color-dark); }
+        .list-item-actions { display: flex; gap: 0.5rem; }
+        .skills-list { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .skill-tag {
+            background-color: var(--color-primary-light); color: var(--color-primary);
+            padding: 0.25rem 0.75rem; border-radius: 999px; font-weight: 600;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .skill-tag button { background: none; border: none; color: var(--color-primary); cursor: pointer; font-size: 1rem; padding: 0; }
+
+        /* 8. Resume & Settings */
+        .resume-card .btn { width: 100%; margin-top: 0.5rem; }
+        .settings-list .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; }
+        
+        /* 9. Toggle Switch */
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--color-border); transition: .4s; border-radius: 34px; }
+        .slider:before {
+            position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--color-primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* 10. Modal Styles */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto; background-color: rgba(0,0,0,0.5);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe; margin: auto; padding: 2rem; border: 1px solid #888;
+            width: 90%; max-width: 500px; border-radius: var(--border-radius);
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-header h2 { color: var(--color-dark); }
+        .close-btn { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 0.75rem; border: 1px solid var(--color-border);
+            border-radius: 0.5rem; font-size: 1rem;
+        }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="navbar">
+            <a href="jobseeker-dashboard.html" class="logo"><i class="fa-solid fa-check-double"></i><span>JobAlign</span></a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="jobseeker-dashboard.html">Dashboard</a></li>
+                    <li><a href="jobsforjobseeker.html">Jobs</a></li>
+                    <li><a href="applicationsforjobseeker.html">Applications</a></li>
+                    <li><a href="#" class="active">Profile</a></li>
+                    <li><a href="settingsforjobseeker.html">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="profile-icon"><img src="../data/images/mahi.jpg" alt="Profile"></div>
+            <button class="menu-toggle" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="profile-layout">
+            <!-- Left Column -->
+            <div class="main-column">
+                <!-- Profile Header -->
+                <div class="card profile-header-card">
+                    <div class="profile-picture">
+                        <img src="../data/images/mahi.jpg" alt="Mahesh" id="profile-pic-img">
+                        <label for="profile-pic-upload" class="edit-pic"><i class="fas fa-camera"></i></label>
+                        <input type="file" id="profile-pic-upload" accept="image/*" style="display:none;">
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="profile-name">Mahesh</h1>
+                        <p id="profile-title">Aspiring Data Scientist</p>
+                        <div class="profile-contact-info">
+                            <span id="profile-location"><i class="fas fa-map-marker-alt"></i> Hyderabad, India</span>
+                            <span id="profile-email"><i class="fas fa-envelope"></i> mahesh.k@email.com</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary edit-profile-btn" data-action="open-modal" data-modal-id="edit-profile-modal">Edit Profile</button>
+                </div>
+                
+                <!-- About Card -->
+                <div class="card">
+                    <div class="card-header"><h2>About</h2></div>
+                    <p id="profile-about">Passionate about data science and machine learning, with strong skills in SQL and Python. Eager to apply knowledge to real-world challenges.</p>
+                </div>
+
+                <!-- Skills Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Skills</h2>
+                        <button class="btn btn-secondary" data-action="open-modal" data-modal-id="add-skill-modal">+ Add Skill</button>
+                    </div>
+                    <div class="skills-list" id="skills-list-container">
+                        <!-- Skills will be rendered here -->
+                    </div>
+                </div>
+
+                <!-- Experience Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Experience</h2>
+                        <button class="btn btn-secondary" data-action="open-modal" data-modal-id="experience-modal">+ Add Experience</button>
+                    </div>
+                    <div id="experience-list-container">
+                        <!-- Experience items will be rendered here -->
+                    </div>
+                </div>
+
+                <!-- Education Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Education</h2>
+                        <button class="btn btn-secondary" data-action="open-modal" data-modal-id="education-modal">+ Add Education</button>
+                    </div>
+                    <div id="education-list-container">
+                        <!-- Education items will be rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="sidebar-column">
+                <!-- Resume Card -->
+                <div class="card resume-card">
+                    <div class="card-header"><h2>Resume</h2></div>
+                    <button class="btn btn-primary">View Resume</button>
+                    <button class="btn btn-secondary">Upload/Update Resume</button>
+                </div>
+
+                <!-- Settings Card -->
+                <div class="card">
+                    <div class="card-header"><h2>Settings</h2></div>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <span>Email Notifications</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>SMS Notifications</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                         <div class="setting-item">
+                            <span>Profile Visibility (Public)</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <button class="btn btn-secondary" style="width:100%;">Change Password</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modals -->
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <span class="close-btn" data-action="close-modal">&times;</span>
+            </div>
+            <form id="edit-profile-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="title">Title / Headline</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                 <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="about">About</label>
+                    <textarea id="about" name="about" rows="4"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Experience Modal -->
+    <div id="experience-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="experience-modal-title">Add Experience</h2>
+                <span class="close-btn" data-action="close-modal">&times;</span>
+            </div>
+            <form id="experience-form">
+                <input type="hidden" id="experience-id" name="id">
+                <div class="form-group">
+                    <label for="exp-title">Job Title</label>
+                    <input type="text" id="exp-title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="exp-company">Company</label>
+                    <input type="text" id="exp-company" name="company" required>
+                </div>
+                <div class="form-group">
+                    <label for="exp-duration">Duration (e.g., May 2023 - Nov 2023)</label>
+                    <input type="text" id="exp-duration" name="duration" required>
+                </div>
+                <div class="form-group">
+                    <label for="exp-description">Description</label>
+                    <textarea id="exp-description" name="description" rows="4"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Education Modal -->
+    <div id="education-modal" class="modal">
+         <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="education-modal-title">Add Education</h2>
+                <span class="close-btn" data-action="close-modal">&times;</span>
+            </div>
+            <form id="education-form">
+                <input type="hidden" id="education-id" name="id">
+                <div class="form-group">
+                    <label for="edu-degree">Degree</label>
+                    <input type="text" id="edu-degree" name="degree" required>
+                </div>
+                <div class="form-group">
+                    <label for="edu-institution">Institution</label>
+                    <input type="text" id="edu-institution" name="institution" required>
+                </div>
+                <div class="form-group">
+                    <label for="edu-year">Year of Completion</label>
+                    <input type="text" id="edu-year" name="year" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Skill Modal -->
+    <div id="add-skill-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Skill</h2>
+                <span class="close-btn" data-action="close-modal">&times;</span>
+            </div>
+            <form id="add-skill-form">
+                <div class="form-group">
+                    <label for="skill-name">Skill Name</label>
+                    <input type="text" id="skill-name" name="skillName" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- MOCK DATA ---
+            let profileData = {
+                name: "Mahesh",
+                title: "Aspiring Data Scientist",
+                location: "Hyderabad, India",
+                email: "mahesh.k@email.com",
+                about: "Passionate about data science and machine learning, with strong skills in SQL and Python. Eager to apply knowledge to real-world challenges.",
+                skills: ["Python", "SQL", "Machine Learning", "Tableau", "React", "Java"],
+                experience: [
+                    { id: 1, title: "Data Analyst Intern", company: "Zerodha", duration: "May 2023 - Nov 2023", description: "Analyzed market data and developed dashboards." },
+                    { id: 2, title: "Software Engineer Intern", company: "Paytm", duration: "Jan 2023 - Apr 2023", description: "Developed and integrated APIs for payment services." }
+                ],
+                education: [
+                    { id: 1, degree: "B.Tech in Computer Science", institution: "JNTU Hyderabad", year: "2022" }
+                ]
+            };
+
+            // --- DOM Elements ---
+            const skillsContainer = document.getElementById('skills-list-container');
+            const experienceContainer = document.getElementById('experience-list-container');
+            const educationContainer = document.getElementById('education-list-container');
+
+            // --- RENDER FUNCTIONS ---
+            const renderProfile = () => {
+                document.getElementById('profile-name').textContent = profileData.name;
+                document.getElementById('profile-title').textContent = profileData.title;
+                document.getElementById('profile-location').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${profileData.location}`;
+                document.getElementById('profile-email').innerHTML = `<i class="fas fa-envelope"></i> ${profileData.email}`;
+                document.getElementById('profile-about').textContent = profileData.about;
+                renderSkills();
+                renderExperience();
+                renderEducation();
+            };
+            
+            const renderSkills = () => {
+                skillsContainer.innerHTML = profileData.skills.map(skill => `
+                    <div class="skill-tag">
+                        <span>${skill}</span>
+                        <button data-action="remove-skill" data-skill="${skill}">&times;</button>
+                    </div>
+                `).join('');
+            };
+
+            const renderExperience = () => {
+                experienceContainer.innerHTML = profileData.experience.map(exp => `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <h3>${exp.title}</h3>
+                            <p>${exp.company} &bull; ${exp.duration}</p>
+                            <p>${exp.description}</p>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-icon" data-action="edit-experience" data-id="${exp.id}"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="btn-icon" data-action="delete-experience" data-id="${exp.id}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            const renderEducation = () => {
+                educationContainer.innerHTML = profileData.education.map(edu => `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <h3>${edu.degree}</h3>
+                            <p>${edu.institution} &bull; ${edu.year}</p>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-icon" data-action="edit-education" data-id="${edu.id}"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="btn-icon" data-action="delete-education" data-id="${edu.id}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            };
+            
+            // --- MODAL HANDLING ---
+            const modals = document.querySelectorAll('.modal');
+            const openModal = (modalId) => {
+                const modal = document.getElementById(modalId);
+                if (modal) modal.style.display = 'flex';
+            };
+            const closeModal = () => {
+                modals.forEach(modal => modal.style.display = 'none');
+            };
+
+            // --- EVENT HANDLING (using delegation) ---
+            document.body.addEventListener('click', (e) => {
+                const target = e.target;
+                const action = target.dataset.action || target.closest('[data-action]')?.dataset.action;
+
+                switch (action) {
+                    case 'open-modal':
+                        const modalId = target.dataset.modalId || target.closest('[data-modal-id]').dataset.modalId;
+                        handleOpenModal(modalId);
+                        break;
+                    case 'close-modal':
+                        closeModal();
+                        break;
+                    case 'remove-skill':
+                        const skillToRemove = target.dataset.skill || target.closest('[data-skill]').dataset.skill;
+                        profileData.skills = profileData.skills.filter(s => s !== skillToRemove);
+                        renderSkills();
+                        break;
+                    case 'edit-experience':
+                        const expId = target.dataset.id || target.closest('[data-id]').dataset.id;
+                        handleEditExperience(parseInt(expId));
+                        break;
+                    case 'delete-experience':
+                        const expIdDel = target.dataset.id || target.closest('[data-id]').dataset.id;
+                        profileData.experience = profileData.experience.filter(exp => exp.id !== parseInt(expIdDel));
+                        renderExperience();
+                        break;
+                    case 'edit-education':
+                         const eduId = target.dataset.id || target.closest('[data-id]').dataset.id;
+                        handleEditEducation(parseInt(eduId));
+                        break;
+                    case 'delete-education':
+                        const eduIdDel = target.dataset.id || target.closest('[data-id]').dataset.id;
+                        profileData.education = profileData.education.filter(edu => edu.id !== parseInt(eduIdDel));
+                        renderEducation();
+                        break;
+                }
+            });
+            
+            // --- FORM SUBMISSIONS ---
+            // Edit Profile
+            document.getElementById('edit-profile-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                profileData.name = formData.get('name');
+                profileData.title = formData.get('title');
+                profileData.email = formData.get('email');
+                profileData.location = formData.get('location');
+                profileData.about = formData.get('about');
+                renderProfile();
+                closeModal();
+            });
+            
+            // Add/Edit Experience
+            document.getElementById('experience-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const expData = {
+                    id: formData.get('id') ? parseInt(formData.get('id')) : Date.now(),
+                    title: formData.get('title'),
+                    company: formData.get('company'),
+                    duration: formData.get('duration'),
+                    description: formData.get('description'),
+                };
+                
+                if (formData.get('id')) { // Editing
+                    const index = profileData.experience.findIndex(exp => exp.id === expData.id);
+                    profileData.experience[index] = expData;
+                } else { // Adding
+                    profileData.experience.push(expData);
+                }
+                renderExperience();
+                closeModal();
+            });
+            
+            // Add/Edit Education
+            document.getElementById('education-form').addEventListener('submit', e => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const eduData = {
+                    id: formData.get('id') ? parseInt(formData.get('id')) : Date.now(),
+                    degree: formData.get('degree'),
+                    institution: formData.get('institution'),
+                    year: formData.get('year'),
+                };
+                if (formData.get('id')) {
+                    const index = profileData.education.findIndex(edu => edu.id === eduData.id);
+                    profileData.education[index] = eduData;
+                } else {
+                    profileData.education.push(eduData);
+                }
+                renderEducation();
+                closeModal();
+            });
+
+            // Add Skill
+            document.getElementById('add-skill-form').addEventListener('submit', e => {
+                e.preventDefault();
+                const newSkill = new FormData(e.target).get('skillName');
+                if (newSkill && !profileData.skills.includes(newSkill)) {
+                    profileData.skills.push(newSkill);
+                    renderSkills();
+                }
+                e.target.reset();
+                closeModal();
+            });
+            
+            // --- Specific Modal Opening Logic ---
+            const handleOpenModal = (modalId) => {
+                if (modalId === 'edit-profile-modal') {
+                    const form = document.getElementById('edit-profile-form');
+                    form.name.value = profileData.name;
+                    form.title.value = profileData.title;
+                    form.email.value = profileData.email;
+                    form.location.value = profileData.location;
+                    form.about.value = profileData.about;
+                }
+                if (modalId === 'experience-modal') {
+                    document.getElementById('experience-modal-title').textContent = "Add Experience";
+                    document.getElementById('experience-form').reset();
+                }
+                 if (modalId === 'education-modal') {
+                    document.getElementById('education-modal-title').textContent = "Add Education";
+                    document.getElementById('education-form').reset();
+                }
+                openModal(modalId);
+            };
+
+            const handleEditExperience = (id) => {
+                const exp = profileData.experience.find(e => e.id === id);
+                if (!exp) return;
+                const form = document.getElementById('experience-form');
+                form.id.value = exp.id;
+                form.title.value = exp.title;
+                form.company.value = exp.company;
+                form.duration.value = exp.duration;
+                form.description.value = exp.description;
+                document.getElementById('experience-modal-title').textContent = "Edit Experience";
+                openModal('experience-modal');
+            };
+
+            const handleEditEducation = (id) => {
+                const edu = profileData.education.find(e => e.id === id);
+                if (!edu) return;
+                const form = document.getElementById('education-form');
+                form.id.value = edu.id;
+                form.degree.value = edu.degree;
+                form.institution.value = edu.institution;
+                form.year.value = edu.year;
+                document.getElementById('education-modal-title').textContent = "Edit Education";
+                openModal('education-modal');
+            };
+            
+            // Profile Picture Upload
+            document.getElementById('profile-pic-upload').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        document.getElementById('profile-pic-img').src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // --- INITIALIZATION ---
+            renderProfile();
+        });
+    </script>
+</body>
+</html>

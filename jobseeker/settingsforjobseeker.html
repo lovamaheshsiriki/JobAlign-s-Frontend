@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - JobAlign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <style>
+        /* 1. Global Reset and Variables */
+        :root {
+            --color-primary: #2563EB; /* Blue */
+            --color-primary-light: #EFF6FF;
+            --color-dark: #0F172A;   /* Dark Blue/Black for text */
+            --color-secondary: #64748B; /* Gray for body text */
+            --color-light-gray: #F1F5F9; 
+            --color-bg: #F8FAFC;
+            --color-white: #FFFFFF;
+            --color-border: #E2E8F0;
+            --color-danger: #DC2626;
+            --color-danger-light: #FEE2E2;
+            
+            --font-family-sans: 'Inter', sans-serif;
+            --border-radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-family-sans); background-color: var(--color-bg);
+            color: var(--color-secondary); line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+        /* 2. Header / Navbar */
+        .header {
+            background-color: var(--color-white); padding: 1rem 1.5rem;
+            box-shadow: var(--shadow); position: sticky; top: 0; z-index: 1000;
+        }
+        .navbar {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem; font-size: 1.5rem;
+            font-weight: 700; color: var(--color-dark); text-decoration: none;
+        }
+        .logo i { color: var(--color-primary); }
+        .main-nav ul { display: none; list-style: none; gap: 2rem; }
+        .main-nav a {
+            font-weight: 500; color: var(--color-secondary); transition: var(--transition-fast);
+            text-decoration: none; padding-bottom: 0.5rem;
+        }
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--color-primary); border-bottom: 2px solid var(--color-primary);
+        }
+        .profile-icon img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+        .menu-toggle { display: block; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-dark); }
+        @media (min-width: 768px) {
+            .main-nav ul { display: flex; }
+            .menu-toggle { display: none; }
+        }
+
+        /* 3. Settings Layout */
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 992px) {
+            .settings-layout { grid-template-columns: 1fr 3fr; }
+        }
+
+        /* 4. Settings Navigation (Sidebar) */
+        .settings-nav {
+            background-color: var(--color-white);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            align-self: flex-start;
+        }
+        .settings-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--color-dark);
+            font-weight: 500;
+            transition: var(--transition-fast);
+        }
+        .settings-nav a:hover { background-color: var(--color-light-gray); }
+        .settings-nav a.active {
+            background-color: var(--color-primary-light);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* 5. Settings Content */
+        .settings-content .card {
+            display: none; /* Hidden by default */
+        }
+        .settings-content .card.active {
+            display: block; /* Shown by JS */
+        }
+        .card {
+            background-color: var(--color-white); padding: 1.5rem 2rem;
+            border-radius: var(--border-radius); box-shadow: var(--shadow);
+        }
+        .card-header {
+            padding-bottom: 1rem; margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .card-header h1, .card-header h2 { color: var(--color-dark); }
+        .card-header p { font-size: 0.95rem; }
+        .card-body .setting-item {
+            display: flex; flex-direction: column;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .card-body .setting-item:last-child { border-bottom: none; }
+
+        @media (min-width: 640px) {
+            .card-body .setting-item {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+        .setting-item-info h3 { color: var(--color-dark); font-size: 1.1rem; }
+        .setting-item-info p { font-size: 0.9rem; max-width: 500px; }
+        .setting-item-action { margin-top: 1rem; }
+        @media (min-width: 640px) { .setting-item-action { margin-top: 0; } }
+        
+        /* 6. Form and Button Styles */
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input {
+            width: 100%; padding: 0.75rem; border: 1px solid var(--color-border);
+            border-radius: 0.5rem; font-size: 1rem;
+        }
+        .password-wrapper { position: relative; }
+        .password-wrapper input { padding-right: 3rem; }
+        .password-toggle {
+            position: absolute; right: 0.5rem; top: 50%;
+            transform: translateY(-50%); background: none;
+            border: none; cursor: pointer; color: var(--color-secondary); font-size: 1.2rem;
+        }
+        .btn {
+            padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition-fast); border: 1px solid transparent;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-primary { background-color: var(--color-primary); color: var(--color-white); border-color: var(--color-primary); }
+        .btn-primary:hover { background-color: #1D4ED8; border-color: #1D4ED8; }
+        .btn-secondary { background-color: var(--color-white); color: var(--color-dark); border-color: var(--color-border); }
+        .btn-secondary:hover { border-color: var(--color-primary); color: var(--color-primary); }
+        .btn-danger { background-color: var(--color-danger); color: var(--color-white); border-color: var(--color-danger); }
+        .btn-danger-outline { background-color: var(--color-white); color: var(--color-danger); border-color: var(--color-danger); }
+
+        /* 7. Toggle Switch */
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--color-border); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--color-primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* 8. Danger Zone */
+        .danger-zone { border: 2px solid var(--color-danger-light); }
+        .danger-zone .card-header h2 { color: var(--color-danger); }
+
+        /* 9. Modal Styles */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto; background-color: rgba(0,0,0,0.5);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe; margin: auto; padding: 2rem; border: 1px solid #888;
+            width: 90%; max-width: 500px; border-radius: var(--border-radius); text-align: center;
+        }
+        .modal-header { text-align: center; margin-bottom: 1.5rem; }
+        .modal-header .icon { font-size: 3rem; color: var(--color-danger); margin-bottom: 1rem; }
+        .modal-header h2 { color: var(--color-dark); }
+        .modal-actions { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="navbar">
+            <a href="jobseeker-dashboard.html" class="logo"><i class="fa-solid fa-check-double"></i><span>JobAlign</span></a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="jobseeker-dashboard.html">Dashboard</a></li>
+                    <li><a href="jobsforjobseeker.html">Jobs</a></li>
+                    <li><a href="applicationsforjobseeker.html">Applications</a></li>
+                    <li><a href="profileforjobseeker.html">Profile</a></li>
+                    <li><a href="#" class="active">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="profile-icon"><a href="profileforjobseeker.html"><img src="../data/images/mahi.jpg" alt="Profile"></a></div>
+            <button class="menu-toggle" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="settings-layout">
+            <!-- Sidebar Navigation -->
+            <aside class="settings-nav" id="settings-nav">
+                <a href="#account" class="active">Account</a>
+                <a href="#notifications">Notifications</a>
+                <a href="#privacy">Privacy</a>
+                <a href="#security">Security</a>
+                <a href="#danger-zone">Danger Zone</a>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="settings-content" id="settings-content">
+                <!-- Account Settings -->
+                <div id="account" class="card active">
+                    <div class="card-header">
+                        <h2>Account Settings</h2>
+                        <p>Manage your account details and password.</p>
+                    </div>
+                    <div class="card-body">
+                        <!-- Change Email -->
+                        <div class="setting-item">
+                            <div class="setting-item-info">
+                                <h3>Email Address</h3>
+                                <p>mahesh.k@email.com</p>
+                            </div>
+                            <div class="setting-item-action">
+                                <form id="change-email-form">
+                                    <input type="email" placeholder="New email address" required>
+                                    <button type="submit" class="btn btn-secondary">Change Email</button>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Change Password -->
+                        <div class="setting-item">
+                            <div class="setting-item-info">
+                                <h3>Password</h3>
+                                <p>Change your password regularly to keep your account secure.</p>
+                            </div>
+                            <div class="setting-item-action">
+                                <form id="change-password-form">
+                                    <div class="form-group password-wrapper">
+                                        <input type="password" id="new-password" placeholder="New password" required>
+                                        <button type="button" class="password-toggle"><i class="fa-solid fa-eye"></i></button>
+                                    </div>
+                                     <div class="form-group password-wrapper">
+                                        <input type="password" id="confirm-password" placeholder="Confirm new password" required>
+                                        <button type="button" class="password-toggle"><i class="fa-solid fa-eye"></i></button>
+                                    </div>
+                                    <button type="submit" class="btn btn-secondary">Change Password</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Settings -->
+                <div id="notifications" class="card">
+                    <div class="card-header">
+                        <h2>Notification Preferences</h2>
+                        <p>Choose how you want to be notified.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>Email Notifications</h3>
+                                <p>Receive job alerts and account updates via email.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>SMS Notifications</h3>
+                                <p>Get interview reminders and important alerts on your phone.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+                            </div>
+                        </div>
+                         <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>Push Notifications</h3>
+                                <p>Get real-time updates directly on your device.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy Settings -->
+                <div id="privacy" class="card">
+                    <div class="card-header">
+                        <h2>Privacy Settings</h2>
+                        <p>Control your profile's visibility and data sharing.</p>
+                    </div>
+                     <div class="card-body">
+                        <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>Profile Visibility</h3>
+                                <p>Allow your profile to be discovered by recruiters.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>Data Sharing</h3>
+                                <p>Share your application data with third-party partners.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                 <!-- Security Settings -->
+                <div id="security" class="card">
+                    <div class="card-header">
+                        <h2>Security</h2>
+                        <p>Enhance your account's security.</p>
+                    </div>
+                     <div class="card-body">
+                        <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>Two-Factor Authentication (2FA)</h3>
+                                <p>Add an extra layer of security to your account.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div id="danger-zone" class="card danger-zone">
+                     <div class="card-header">
+                        <h2>Danger Zone</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>Delete Account</h3>
+                                <p>Once you delete your account, there is no going back. Please be certain.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <button class="btn btn-danger" id="delete-account-btn">Delete My Account</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Delete Account Modal -->
+    <div id="delete-confirm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <h2>Are you sure?</h2>
+                <p>This action cannot be undone. All your data will be permanently deleted.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancel-delete-btn">Cancel</button>
+                <button class="btn btn-danger" id="confirm-delete-btn">Yes, Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Settings Navigation ---
+            const navLinks = document.querySelectorAll('.settings-nav a');
+            const contentCards = document.querySelectorAll('.settings-content .card');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+
+                    // Update active link
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    link.classList.add('active');
+
+                    // Show target card
+                    contentCards.forEach(card => {
+                        card.classList.remove('active');
+                        if (card.id === targetId) {
+                            card.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // --- Password Visibility Toggle ---
+            const passwordToggles = document.querySelectorAll('.password-toggle');
+            passwordToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const passwordInput = toggle.previousElementSibling;
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    toggle.querySelector('i').classList.toggle('fa-eye');
+                    toggle.querySelector('i').classList.toggle('fa-eye-slash');
+                });
+            });
+
+            // --- Form Validations ---
+            document.getElementById('change-email-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Email change request sent! Please check your inbox.');
+                e.target.reset();
+            });
+
+            document.getElementById('change-password-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newPass = document.getElementById('new-password').value;
+                const confirmPass = document.getElementById('confirm-password').value;
+                if (newPass !== confirmPass) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+                if (newPass.length < 8) {
+                    alert('Password must be at least 8 characters long.');
+                    return;
+                }
+                alert('Password changed successfully!');
+                e.target.reset();
+            });
+
+            // --- Delete Account Modal ---
+            const deleteModal = document.getElementById('delete-confirm-modal');
+            const openDeleteModalBtn = document.getElementById('delete-account-btn');
+            const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+
+            openDeleteModalBtn.addEventListener('click', () => {
+                deleteModal.style.display = 'flex';
+            });
+            cancelDeleteBtn.addEventListener('click', () => {
+                deleteModal.style.display = 'none';
+            });
+            confirmDeleteBtn.addEventListener('click', () => {
+                alert('Account has been deleted.');
+                deleteModal.style.display = 'none';
+                // Here you would typically redirect the user or log them out.
+            });
+            
+            // Close modal if clicked outside
+             window.addEventListener('click', (event) => {
+                if (event.target == deleteModal) {
+                    deleteModal.style.display = 'none';
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

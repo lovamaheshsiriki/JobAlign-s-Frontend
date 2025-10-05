@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications - JobAlign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <style>
+        /* 1. Global Reset and Variables */
+        :root {
+            --color-primary: #2563EB; /* Blue */
+            --color-primary-light: #EFF6FF;
+            --color-dark: #0F172A;   /* Dark Blue/Black for text */
+            --color-secondary: #64748B; /* Gray for body text */
+            --color-light-gray: #F1F5F9; /* Light gray for backgrounds */
+            --color-bg: #F8FAFC;
+            --color-white: #FFFFFF;
+            --color-border: #E2E8F0;
+            
+            /* Status Colors */
+            --color-pending-bg: #FEF3C7;
+            --color-pending-text: #B45309;
+            --color-shortlisted-bg: #D1FAE5;
+            --color-shortlisted-text: #065F46;
+            --color-selected-bg: #DBEAFE;
+            --color-selected-text: #1E40AF;
+            --color-rejected-bg: #FEE2E2;
+            --color-rejected-text: #991B1B;
+            
+            --font-family-sans: 'Inter', sans-serif;
+            --border-radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-bg);
+            color: var(--color-secondary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* 2. Header / Navbar */
+        .header {
+            background-color: var(--color-white);
+            padding: 1rem 1.5rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            text-decoration: none;
+        }
+
+        .logo i { color: var(--color-primary); }
+
+        .main-nav ul {
+            display: none;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .main-nav a {
+            font-weight: 500;
+            color: var(--color-secondary);
+            transition: var(--transition-fast);
+            text-decoration: none;
+            padding-bottom: 0.5rem;
+        }
+
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .profile-icon img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .menu-toggle {
+            display: block;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--color-dark);
+        }
+
+        @media (min-width: 768px) {
+            .main-nav ul { display: flex; }
+            .menu-toggle { display: none; }
+        }
+
+        /* 3. Main Applications Section */
+        .applications-container {
+            background-color: var(--color-white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .applications-header h1 {
+            color: var(--color-dark);
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .applications-header p {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* 4. Filters */
+        .filters {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 640px) {
+           .filters {
+               flex-direction: row;
+               justify-content: space-between;
+           }
+        }
+        
+        .search-bar {
+            position: relative;
+            flex-grow: 1;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-secondary);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+        }
+        
+        .filter-btn {
+            padding: 0.65rem 1rem;
+            border: 1px solid var(--color-border);
+            background-color: var(--color-white);
+            color: var(--color-secondary);
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            white-space: nowrap;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--color-primary);
+        }
+        
+        .filter-btn.active {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-color: var(--color-primary);
+        }
+
+        /* 5. Applications List */
+        #applications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .application-card {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            transition: var(--transition-fast);
+        }
+        
+        .application-card:hover {
+            box-shadow: var(--shadow);
+            border-color: var(--color-primary);
+        }
+        
+        @media (min-width: 768px) {
+            .application-card {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+        
+        .job-details h3 {
+            color: var(--color-dark);
+            margin-bottom: 0.25rem;
+        }
+        
+        .job-details h3 a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .job-details h3 a:hover {
+            text-decoration: underline;
+        }
+        
+        .job-meta {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+           .job-meta {
+               margin-bottom: 0;
+           }
+        }
+        
+        .application-status-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        .status-badge.Pending { background-color: var(--color-pending-bg); color: var(--color-pending-text); }
+        .status-badge.Shortlisted { background-color: var(--color-shortlisted-bg); color: var(--color-shortlisted-text); }
+        .status-badge.Selected { background-color: var(--color-selected-bg); color: var(--color-selected-text); }
+        .status-badge.Rejected { background-color: var(--color-rejected-bg); color: var(--color-rejected-text); }
+        
+        .btn-primary {
+            padding: 0.6rem 1.2rem;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-fast);
+        }
+        .btn-primary:hover {
+            background-color: #1D4ED8;
+        }
+        
+        /* 6. Pagination */
+        .pagination {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .pagination button, .pagination span {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--color-border);
+            background-color: var(--color-white);
+            color: var(--color-secondary);
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .pagination button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        .pagination span.active {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-color: var(--color-primary);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="navbar">
+            <a href="jobseeker-dashboard.html" class="logo">
+                <i class="fa-solid fa-check-double"></i>
+                <span>JobAlign</span>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="jobseeker-dashboard.html">Dashboard</a></li>
+                    <li><a href="jobsforjobseeker.html">Jobs</a></li>
+                    <li><a href="#" class="active">Applications</a></li>
+                    <li><a href="profileforjobseeker.html">Profile</a></li>
+                    <li><a href="settingsforjobseeker.html">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="profile-icon">
+                <a href="profileforjobseeker.html"><img src="../data/images/mahi.jpg" alt="Profile"></a>
+            </div>
+            <button class="menu-toggle" aria-label="Toggle Navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="applications-container">
+            <div class="applications-header">
+                <h1>My Applications</h1>
+                <p>Track your applied jobs and their statuses.</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="search" id="search-input" placeholder="Search by job title or company...">
+                </div>
+                <div class="filter-buttons" id="filter-buttons">
+                    <button class="filter-btn active" data-status="All">All</button>
+                    <button class="filter-btn" data-status="Pending">Pending</button>
+                    <button class="filter-btn" data-status="Shortlisted">Shortlisted</button>
+                    <button class="filter-btn" data-status="Selected">Selected</button>
+                    <button class="filter-btn" data-status="Rejected">Rejected</button>
+                </div>
+            </div>
+
+            <!-- Applications List -->
+            <div id="applications-list">
+                <!-- Application cards will be dynamically inserted here -->
+            </div>
+            <div id="no-results" class="no-results" style="display: none;">
+                <p>No applications found matching your criteria.</p>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- Pagination buttons will be dynamically inserted here -->
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- MOCK DATA ---
+            const allApplications = [
+                { id: 1, title: "Data Analyst", company: "Infosys", location: "Bangalore", appliedOn: "2024-07-20", status: "Pending" },
+                { id: 2, title: "Frontend Developer", company: "TCS", location: "Hyderabad", appliedOn: "2024-07-15", status: "Shortlisted" },
+                { id: 3, title: "Backend Engineer", company: "Wipro", location: "Hyderabad", appliedOn: "2024-07-25", status: "Selected" },
+                { id: 4, title: "UI/UX Designer", company: "Swiggy", location: "Bangalore", appliedOn: "2024-07-10", status: "Rejected" },
+                { id: 5, title: "Product Manager", company: "Microsoft", location: "Hyderabad", appliedOn: "2024-07-05", status: "Shortlisted" },
+                { id: 6, title: "DevOps Engineer", company: "Amazon", location: "Bangalore", appliedOn: "2024-06-28", status: "Pending" },
+                { id: 7, title: "Full Stack Developer", company: "Netflix", location: "Remote", appliedOn: "2024-06-20", status: "Rejected" },
+                { id: 8, title: "Data Scientist", company: "Flipkart", location: "Bangalore", appliedOn: "2024-06-15", status: "Pending" },
+            ];
+
+            // --- STATE ---
+            let currentPage = 1;
+            const itemsPerPage = 5;
+            let currentStatusFilter = 'All';
+            let currentSearchTerm = '';
+
+            // --- DOM Elements ---
+            const appListContainer = document.getElementById('applications-list');
+            const paginationContainer = document.getElementById('pagination');
+            const filterButtonsContainer = document.getElementById('filter-buttons');
+            const searchInput = document.getElementById('search-input');
+            const noResultsEl = document.getElementById('no-results');
+
+            // --- FUNCTIONS ---
+            
+            const createApplicationCardHTML = (app) => `
+                <div class="application-card">
+                    <div class="job-details">
+                        <h3><a href="#">${app.title}</a></h3>
+                        <div class="job-meta">
+                            <span>${app.company} &bull; ${app.location}</span><br>
+                            <span>Applied: ${app.appliedOn}</span>
+                        </div>
+                    </div>
+                    <div class="application-status-actions">
+                        <span class="status-badge ${app.status}">${app.status}</span>
+                        <a href="#" class="btn-primary">View Details</a>
+                    </div>
+                </div>
+            `;
+            
+            const renderApplications = () => {
+                // 1. Filter data
+                let filteredApps = allApplications;
+
+                if (currentStatusFilter !== 'All') {
+                    filteredApps = filteredApps.filter(app => app.status === currentStatusFilter);
+                }
+
+                if (currentSearchTerm) {
+                    const searchTermLower = currentSearchTerm.toLowerCase();
+                    filteredApps = filteredApps.filter(app => 
+                        app.title.toLowerCase().includes(searchTermLower) || 
+                        app.company.toLowerCase().includes(searchTermLower)
+                    );
+                }
+                
+                // Show/hide 'no results' message
+                noResultsEl.style.display = filteredApps.length === 0 ? 'block' : 'none';
+
+                // 2. Paginate data
+                const totalPages = Math.ceil(filteredApps.length / itemsPerPage);
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const paginatedApps = filteredApps.slice(startIndex, startIndex + itemsPerPage);
+
+                // 3. Render
+                appListContainer.innerHTML = paginatedApps.map(createApplicationCardHTML).join('');
+                renderPagination(totalPages);
+            };
+
+            const renderPagination = (totalPages) => {
+                paginationContainer.innerHTML = '';
+                if (totalPages <= 1) return;
+
+                // Previous Button
+                const prevButton = document.createElement('button');
+                prevButton.innerHTML = '&laquo; Previous';
+                prevButton.disabled = currentPage === 1;
+                prevButton.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        renderApplications();
+                    }
+                });
+                paginationContainer.appendChild(prevButton);
+
+                // Page Numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageSpan = document.createElement('span');
+                    pageSpan.textContent = i;
+                    if (i === currentPage) {
+                        pageSpan.classList.add('active');
+                    }
+                    pageSpan.addEventListener('click', () => {
+                        currentPage = i;
+                        renderApplications();
+                    });
+                    paginationContainer.appendChild(pageSpan);
+                }
+
+                // Next Button
+                const nextButton = document.createElement('button');
+                nextButton.innerHTML = 'Next &raquo;';
+                nextButton.disabled = currentPage === totalPages;
+                nextButton.addEventListener('click', () => {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        renderApplications();
+                    }
+                });
+                paginationContainer.appendChild(nextButton);
+            };
+
+            // --- EVENT LISTENERS ---
+            
+            filterButtonsContainer.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    document.querySelector('.filter-btn.active').classList.remove('active');
+                    e.target.classList.add('active');
+                    currentStatusFilter = e.target.dataset.status;
+                    currentPage = 1; // Reset to first page on filter change
+                    renderApplications();
+                }
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                currentSearchTerm = e.target.value;
+                currentPage = 1; // Reset to first page on search
+                renderApplications();
+            });
+
+            // --- INITIALIZATION ---
+            renderApplications();
+        });
+    </script>
+</body>
+</html>

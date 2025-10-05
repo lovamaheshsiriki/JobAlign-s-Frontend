@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seeker Registration - JobAlign</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #1E293B;
+            --color-secondary: #fff;
+            --color-accent: #2563EB;
+            --color-text: #475569;
+            --color-light-bg: #F8FAFC;
+            --color-border: #E2E8F0;
+            --color-highlight: #0F172A;
+            --color-error: #EF4444;
+            --color-success: #22C55E;
+
+            --font-family-sans: 'Inter', sans-serif;
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2.5rem;
+            --space-xl: 4rem;
+            --border-radius-md: 0.5rem;
+            --transition-fast: 0.2s ease-in-out;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-family-sans);
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-light-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: var(--space-lg);
+        }
+        a { color: var(--color-accent); text-decoration: none; font-weight: 500; transition: color var(--transition-fast); }
+        a:hover { text-decoration: underline; }
+        .registration-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: var(--color-secondary);
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+            border: 1px solid var(--color-border);
+            padding: var(--space-xl);
+        }
+        .page-header { text-align: center; margin-bottom: var(--space-lg); }
+        .page-header h1 { font-size: 2.5rem; font-weight: 800; color: var(--color-highlight); margin-bottom: var(--space-sm); }
+        .page-header p { font-size: 1.125rem; }
+        .registration-form { display: flex; flex-direction: column; gap: var(--space-md); }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { margin-bottom: var(--space-xs); font-weight: 600; color: var(--color-highlight); }
+        .form-group input {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-family-sans);
+            font-size: 1rem;
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        .form-group input.input-error { border-color: var(--color-error); }
+        .form-group input.input-error:focus { box-shadow: 0 0 0 3px rgba(239,68,68,0.2); }
+        .form-group input:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.2); }
+        .validation-message { font-size: 0.875rem; color: var(--color-error); margin-top: var(--space-xs); min-height: 1.2em; }
+        .form-group-checkbox { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; }
+        .form-group-checkbox input[type="checkbox"] { width: 1.25em; height: 1.25em; accent-color: var(--color-accent); }
+        #form-message {
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius-md);
+            text-align: center;
+            font-weight: 500;
+            margin-bottom: var(--space-md);
+            display: none;
+        }
+        #form-message.success { background-color: #D1FAE5; color: #065F46; display: block; }
+        #form-message.error { background-color: #FEE2E2; color: #991B1B; display: block; }
+        .btn-submit {
+            padding: 0.875rem 1.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid transparent;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            border-color: var(--color-primary);
+            margin-top: var(--space-sm);
+        }
+        .btn-submit:hover {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        @media (max-width:540px) {
+            body { padding:0; align-items:flex-start; background-color: var(--color-secondary); }
+            .registration-container { box-shadow:none; border:none; border-radius:0; padding: var(--space-xl) var(--space-md); }
+            .page-header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="registration-container">
+    <header class="page-header">
+        <h1>Job Seeker Registration</h1>
+        <p>Sign up to discover the right jobs for your skills and career goals.</p>
+    </header>
+
+    <div id="form-message"></div>
+
+    <form class="registration-form" id="jobSeekerForm" novalidate>
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName">
+            <p class="validation-message" id="fullNameError"></p>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email">
+            <p class="validation-message" id="emailError"></p>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
+            <p class="validation-message" id="passwordError"></p>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword">
+            <p class="validation-message" id="confirmPasswordError"></p>
+        </div>
+        <div class="form-group-checkbox">
+            <input type="checkbox" id="terms" name="terms">
+            <label for="terms">I agree to the <a href="#">Terms and Conditions</a></label>
+        </div>
+        <p class="validation-message" id="termsError"></p>
+        <button type="submit" class="btn-submit">Join Now</button>
+    </form>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, onAuthStateChanged, reload } 
+    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+// Firebase config
+const firebaseConfig = {
+    apiKey: "AIzaSyAT7FMH1jUxa3LfLvM9dc7nCQJKoSsXHSE",
+    authDomain: "jobalign-3b8c7.firebaseapp.com",
+    projectId: "jobalign-3b8c7",
+    storageBucket: "jobalign-3b8c7.firebasestorage.app",
+    messagingSenderId: "135619034207",
+    appId: "1:135619034207:web:bb35c6a6a3104184d1afea"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('jobSeekerForm');
+    const formMessage = document.getElementById('form-message');
+
+    const fullName = document.getElementById('fullName');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const terms = document.getElementById('terms');
+
+    const fullNameError = document.getElementById('fullNameError');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const confirmPasswordError = document.getElementById('confirmPasswordError');
+    const termsError = document.getElementById('termsError');
+
+    // ======= Check email verification on page load =======
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            await reload(user); // Refresh user data
+            if (user.emailVerified) {
+                // Redirect to job seeker dashboard
+                window.location.href = 'jobseeker-dashboard.html';
+            } else {
+                showMainMessage('Please verify your email first. Check your inbox.', 'error');
+            }
+        }
+    });
+
+    // ======= Registration form submission =======
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (validateForm()) {
+            createUserWithEmailAndPassword(auth, email.value, password.value)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                return updateProfile(user, { displayName: fullName.value })
+                    .then(() => sendEmailVerification(user)); // send verification email
+            })
+            .then(() => {
+                showMainMessage('Registration successful! Check your email for verification link. You cannot login until verified.', 'success');
+                form.reset();
+            })
+            .catch((error) => showMainMessage(error.message, 'error'));
+        } else {
+            showMainMessage('Please correct the errors below.', 'error');
+        }
+    });
+
+    function validateForm() {
+        let isValid = true;
+        clearErrors();
+        if (fullName.value.trim() === '') { showError(fullName, fullNameError, 'Full Name is required.'); isValid=false; }
+        if (email.value.trim() === '') { showError(email, emailError, 'Email Address is required.'); isValid=false; } 
+        else if (!isValidEmail(email.value)) { showError(email, emailError, 'Please enter a valid email address.'); isValid=false; }
+        if (password.value.trim() === '') { showError(password, passwordError, 'Password is required.'); isValid=false; } 
+        else if (password.value.length < 8) { showError(password, passwordError, 'Password must be at least 8 characters long.'); isValid=false; }
+        if (confirmPassword.value.trim() === '') { showError(confirmPassword, confirmPasswordError, 'Please confirm your password.'); isValid=false; } 
+        else if (password.value !== confirmPassword.value) { showError(confirmPassword, confirmPasswordError, 'Passwords do not match.'); isValid=false; }
+        if (!terms.checked) { termsError.textContent='You must agree to the terms and conditions.'; isValid=false; }
+        return isValid;
+    }
+
+    function showError(input, errorElement, message) { input.classList.add('input-error'); errorElement.textContent = message; }
+    function showMainMessage(message, type) { formMessage.textContent = message; formMessage.className = type; }
+    function clearErrors() {
+        formMessage.textContent=''; formMessage.className='';
+        [fullName,email,password,confirmPassword].forEach(i=>i.classList.remove('input-error'));
+        [fullNameError,emailError,passwordError,confirmPasswordError,termsError].forEach(e=>e.textContent='');
+    }
+    function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.toLowerCase()); }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - JobAlign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+</head>
+    <style>
+        /* 1. Global Reset and Variables */
+        :root {
+            --color-primary: #2563EB; /* Blue */
+            --color-primary-light: #EFF6FF;
+            --color-dark: #0F172A;   /* Dark Blue/Black for text */
+            --color-secondary: #64748B; /* Gray for body text */
+            --color-light: #F8FAFC;   /* Light gray for backgrounds */
+            --color-white: #FFFFFF;
+            --color-border: #E2E8F0;
+            --color-danger: #DC2626;
+            --color-danger-light: #FEE2E2;
+            --color-success: #16A34A;
+            --color-success-light: #F0FDF4;
+            
+            --font-family-sans: 'Inter', sans-serif;
+            --border-radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-light);
+            color: var(--color-secondary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* 2. Header / Navbar */
+        .header {
+            background-color: var(--color-white); padding: 1rem 1.5rem;
+            box-shadow: var(--shadow); position: sticky; top: 0; z-index: 1000;
+        }
+        .navbar {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem; font-size: 1.5rem;
+            font-weight: 700; color: var(--color-dark); text-decoration: none;
+        }
+        .logo i { color: var(--color-primary); }
+        .main-nav ul { display: none; list-style: none; gap: 2rem; }
+        .main-nav a {
+            font-weight: 500; color: var(--color-secondary); transition: var(--transition-fast);
+            text-decoration: none; padding-bottom: 0.5rem;
+        }
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--color-primary); border-bottom: 2px solid var(--color-primary);
+        }
+        .profile-icon img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+        .menu-toggle { display: block; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-dark); }
+        @media (min-width: 992px) {
+            .main-nav ul { display: flex; }
+            .menu-toggle { display: none; }
+        }
+
+        /* 3. Settings Layout */
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 992px) {
+            .settings-layout { grid-template-columns: 1fr 3fr; }
+        }
+
+        /* 4. Settings Navigation (Sidebar) */
+        .settings-nav {
+            background-color: var(--color-white);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            align-self: flex-start;
+        }
+        .settings-nav a {
+            display: block; padding: 0.75rem 1rem; border-radius: 0.5rem;
+            text-decoration: none; color: var(--color-dark);
+            font-weight: 500; transition: var(--transition-fast);
+        }
+        .settings-nav a:hover { background-color: var(--color-light); }
+        .settings-nav a.active {
+            background-color: var(--color-primary-light);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* 5. Settings Content */
+        .settings-content .card { display: none; }
+        .settings-content .card.active { display: block; }
+        .card {
+            background-color: var(--color-white); padding: 1.5rem 2rem;
+            border-radius: var(--border-radius); box-shadow: var(--shadow);
+        }
+        .card-header {
+            padding-bottom: 1rem; margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .card-header h1, .card-header h2 { color: var(--color-dark); }
+        .card-header p { font-size: 0.95rem; }
+        .setting-item {
+            display: flex; flex-direction: column; padding: 1.25rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .setting-item:last-child { border-bottom: none; }
+        @media (min-width: 640px) {
+            .setting-item {
+                flex-direction: row; justify-content: space-between; align-items: center;
+            }
+        }
+        .setting-item-info h3 { color: var(--color-dark); font-size: 1.1rem; }
+        .setting-item-info p { font-size: 0.9rem; max-width: 500px; }
+        .setting-item-action { margin-top: 1rem; }
+        @media (min-width: 640px) { .setting-item-action { margin-top: 0; } }
+        
+        /* 6. Form, Button, and Toggle Styles */
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input {
+            width: 100%; padding: 0.75rem; border: 1px solid var(--color-border);
+            border-radius: 0.5rem; font-size: 1rem;
+        }
+        .password-wrapper { position: relative; }
+        .password-wrapper input { padding-right: 3rem; }
+        .password-toggle {
+            position: absolute; right: 0.5rem; top: 50%;
+            transform: translateY(-50%); background: none; border: none;
+            cursor: pointer; color: var(--color-secondary); font-size: 1.2rem;
+        }
+        .btn {
+            padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition-fast); border: 1px solid transparent;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-primary { background-color: var(--color-primary); color: var(--color-white); border-color: var(--color-primary); }
+        .btn-primary:hover { background-color: #1D4ED8; }
+        .btn-secondary { background-color: var(--color-white); color: var(--color-dark); border-color: var(--color-border); }
+        .btn-secondary:hover { border-color: var(--color-primary); }
+        .btn-danger { background-color: var(--color-danger); color: var(--color-white); border-color: var(--color-danger); }
+        .form-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem; }
+
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--color-border); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--color-primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* 7. Danger Zone & Modal */
+        .danger-zone { border: 2px solid var(--color-danger-light); }
+        .danger-zone .card-header h2 { color: var(--color-danger); }
+
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto; background-color: rgba(0,0,0,0.5);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe; margin: auto; padding: 2rem; border: 1px solid #888;
+            width: 90%; max-width: 500px; border-radius: var(--border-radius); text-align: center;
+        }
+        .modal-header { text-align: center; margin-bottom: 1.5rem; }
+        .modal-header .icon { font-size: 3rem; margin-bottom: 1rem; }
+        .modal-header h2 { color: var(--color-dark); }
+        .modal-actions { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+        
+        /* 8. Success Alert */
+        .alert-success {
+            display: none; padding: 1rem; margin-bottom: 1.5rem;
+            background-color: var(--color-success-light); color: var(--color-success);
+            border: 1px solid var(--color-success); border-radius: var(--border-radius);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="navbar">
+            <a href="recruiter-dashboard.html" class="logo"><i class="fa-solid fa-check-double"></i><span>JobAlign</span></a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="recruiter-dashboard.html">Dashboard</a></li>
+                    <li><a href="postjob.html">Post Job</a></li>
+                    <li><a href="applicants.html">Applicants</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="#" class="active">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="profile-icon"><a href="profile.html"><img src="..\data\images\Mahi.jpg" alt="Profile"></a></div>
+            <button class="menu-toggle" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="settings-layout">
+            <!-- Sidebar Navigation -->
+            <aside class="settings-nav" id="settings-nav">
+                <a href="#account" class="active">Account</a>
+                <a href="#notifications">Notifications</a>
+                <a href="#preferences">Preferences</a>
+                <a href="#danger-zone">Danger Zone</a>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="settings-content" id="settings-content">
+                <div id="success-alert" class="alert-success"><i class="fas fa-check-circle"></i> Settings saved successfully!</div>
+
+                <!-- Account Settings -->
+                <div id="account" class="card active">
+                    <div class="card-header"><h2>Account Settings</h2></div>
+                    <form class="card-body" id="account-form">
+                        <div class="setting-item">
+                            <div class="setting-item-info"><h3>Update Password</h3></div>
+                            <div class="setting-item-action">
+                                <div class="form-group"><input type="password" id="current-password" placeholder="Current Password" required></div>
+                                <div class="form-group password-wrapper">
+                                    <input type="password" id="new-password" placeholder="New Password" required>
+                                    <button type="button" class="password-toggle"><i class="fa-solid fa-eye"></i></button>
+                                </div>
+                                <div class="form-group password-wrapper">
+                                    <input type="password" id="confirm-password" placeholder="Confirm New Password" required>
+                                    <button type="button" class="password-toggle"><i class="fa-solid fa-eye"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>Two-Factor Authentication</h3>
+                                <p>Add an extra layer of security to your account.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Notifications Settings -->
+                <div id="notifications" class="card">
+                    <div class="card-header"><h2>Notification Preferences</h2></div>
+                    <form class="card-body" id="notifications-form">
+                        <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>New Applicants</h3>
+                                <p>Get an email when a new candidate applies to your jobs.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-item-info">
+                                <h3>Job Expiry Reminder</h3>
+                                <p>Receive a reminder before your job postings expire.</p>
+                            </div>
+                            <div class="setting-item-action">
+                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Company Preferences -->
+                <div id="preferences" class="card">
+                    <div class="card-header"><h2>Company Preferences</h2></div>
+                    <form class="card-body" id="preferences-form">
+                        <div class="setting-item">
+                            <div class="setting-item-info">
+                                <h3>Default Job Post Visibility</h3>
+                                <p>Choose whether new jobs are public or private by default.</p>
+                            </div>
+                            <div class="setting-item-action">
+                                <select><option>Public</option><option>Private</option></select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Danger Zone -->
+                <div id="danger-zone" class="card danger-zone">
+                     <div class="card-header"><h2>Danger Zone</h2></div>
+                     <div class="card-body">
+                        <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>Deactivate Account</h3>
+                                <p>Temporarily disable your account and job posts.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <button type="button" class="btn btn-secondary" data-action="deactivate">Deactivate</button>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                             <div class="setting-item-info">
+                                <h3>Delete Account</h3>
+                                <p>Permanently delete your account and all associated data.</p>
+                            </div>
+                             <div class="setting-item-action">
+                                <button type="button" class="btn btn-danger" data-action="delete">Delete Permanently</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <h2 id="modal-title">Are you sure?</h2>
+                <p id="modal-text"></p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="modal-cancel-btn">Cancel</button>
+                <button class="btn" id="modal-confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Settings Tab Navigation ---
+        const navLinks = document.querySelectorAll('.settings-nav a');
+        const contentCards = document.querySelectorAll('.settings-content .card');
+        navLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                contentCards.forEach(card => card.classList.remove('active'));
+                link.classList.add('active');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+
+        // --- Password Visibility Toggle ---
+        document.querySelectorAll('.password-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const input = toggle.previousElementSibling;
+                input.type = input.type === 'password' ? 'text' : 'password';
+                toggle.querySelector('i').classList.toggle('fa-eye');
+                toggle.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        });
+
+        // --- Success Message Handling ---
+        const successAlert = document.getElementById('success-alert');
+        const showSuccessMessage = () => {
+            successAlert.style.display = 'block';
+            window.scrollTo(0, 0);
+            setTimeout(() => { successAlert.style.display = 'none'; }, 4000);
+        };
+        
+        // --- Form Submissions ---
+        document.getElementById('account-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const newPass = document.getElementById('new-password').value;
+            const confirmPass = document.getElementById('confirm-password').value;
+            if (newPass !== confirmPass) {
+                alert('New passwords do not match!');
+                return;
+            }
+            if (newPass && newPass.length < 8) {
+                alert('New password must be at least 8 characters long.');
+                return;
+            }
+            console.log('Account settings saved!');
+            showSuccessMessage();
+        });
+
+        document.getElementById('notifications-form').addEventListener('submit', e => {
+            e.preventDefault();
+            console.log('Notification settings saved!');
+            showSuccessMessage();
+        });
+
+        document.getElementById('preferences-form').addEventListener('submit', e => {
+            e.preventDefault();
+            console.log('Preferences saved!');
+            showSuccessMessage();
+        });
+
+        // --- Confirmation Modal Logic ---
+        const modal = document.getElementById('confirm-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalText = document.getElementById('modal-text');
+        const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+        const modalCancelBtn = document.getElementById('modal-cancel-btn');
+        const modalIcon = modal.querySelector('.icon i');
+
+        const openModal = (config) => {
+            modalTitle.textContent = config.title;
+            modalText.textContent = config.text;
+            modalConfirmBtn.textContent = config.confirmText;
+            modalConfirmBtn.className = `btn ${config.confirmClass}`;
+            modalIcon.className = `fas ${config.iconClass}`;
+            modalIcon.style.color = config.iconColor;
+            modal.style.display = 'flex';
+            
+            modalConfirmBtn.onclick = () => {
+                config.onConfirm();
+                closeModal();
+            };
+        };
+
+        const closeModal = () => { modal.style.display = 'none'; };
+        modalCancelBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+        document.querySelector('[data-action="deactivate"]').addEventListener('click', () => {
+            openModal({
+                title: 'Deactivate Account?',
+                text: 'Your job posts will be hidden and you will not be able to log in until you reactivate.',
+                confirmText: 'Yes, Deactivate',
+                confirmClass: 'btn-secondary',
+                iconClass: 'fa-exclamation-triangle',
+                iconColor: 'var(--color-secondary)',
+                onConfirm: () => console.log('Account deactivated.')
+            });
+        });
+
+        document.querySelector('[data-action="delete"]').addEventListener('click', () => {
+            openModal({
+                title: 'Delete Account Permanently?',
+                text: 'This action cannot be undone. All your data will be permanently erased.',
+                confirmText: 'Yes, Delete Account',
+                confirmClass: 'btn-danger',
+                iconClass: 'fa-exclamation-triangle',
+                iconColor: 'var(--color-danger)',
+                onConfirm: () => console.log('Account deleted.')
+            });
+        });
+    });
+    </script>
+</body>
+</html>

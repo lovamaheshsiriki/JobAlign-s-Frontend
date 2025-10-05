@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Registration - JobAlign</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* 1. Global Variables and Reset (from JobAlign branding) */
+        :root {
+            --color-primary: #1E293B;
+            --color-secondary: #fff;
+            --color-accent: #2563EB;
+            --color-text: #475569;
+            --color-light-bg: #F8FAFC;
+            --color-border: #E2E8F0;
+            --color-highlight: #0F172A;
+            --color-error: #EF4444;
+            --color-success: #22C55E;
+
+            --font-family-sans: 'Inter', sans-serif;
+
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2.5rem;
+            --space-xl: 4rem;
+
+            --border-radius-md: 0.5rem;
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-light-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: var(--space-xl) 0;
+        }
+
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover { text-decoration: underline; }
+
+        /* 2. Main Layout and Container */
+        .registration-container {
+            width: 100%;
+            max-width: 650px;
+            background-color: var(--color-secondary);
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 10px B30px rgba(0, 0, 0, 0.07);
+            border: 1px solid var(--color-border);
+            padding: var(--space-xl);
+            margin: var(--space-lg) 0;
+        }
+
+        /* 3. Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-highlight);
+            margin-bottom: var(--space-sm);
+        }
+        .page-header p { font-size: 1.125rem; }
+
+        /* 4. Form Styling */
+        .registration-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            margin-bottom: var(--space-xs);
+            font-weight: 600;
+            color: var(--color-highlight);
+        }
+        .form-group label .optional {
+            color: var(--color-text);
+            font-weight: 400;
+            font-size: 0.9em;
+        }
+
+        .form-group input {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-family-sans);
+            font-size: 1rem;
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        
+        .form-group input.input-error { border-color: var(--color-error); }
+        .form-group input.input-error:focus { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2); }
+        
+        .validation-message {
+            font-size: 0.875rem;
+            color: var(--color-error);
+            margin-top: var(--space-xs);
+            min-height: 1.2em;
+        }
+        
+        /* File Input Styling */
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .file-upload-wrapper:hover { border-color: var(--color-accent); }
+        .file-upload-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-upload-text {
+            color: var(--color-text);
+        }
+        .file-upload-text.file-selected {
+            color: var(--color-highlight);
+            font-weight: 500;
+        }
+
+        /* Captcha Styling */
+        .captcha-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        #captcha-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            background-color: var(--color-light-bg);
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--color-border);
+            user-select: none;
+            text-decoration: line-through;
+            letter-spacing: 2px;
+        }
+
+        /* Messages and Button */
+        #form-message {
+            grid-column: 1 / -1;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius-md);
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+        #form-message.success { background-color: #D1FAE5; color: #065F46; display: block; }
+        #form-message.error { background-color: #FEE2E2; color: #991B1B; display: block; }
+
+        .btn-submit {
+            grid-column: 1 / -1;
+            padding: 0.875rem 1.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid transparent;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+        }
+        .btn-submit:hover {
+            background-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 5. Responsive Design */
+        @media (max-width: 768px) {
+            .registration-form {
+                grid-template-columns: 1fr;
+            }
+            .form-group {
+                grid-column: 1 / -1; /* Stack all fields */
+            }
+        }
+        @media (max-width: 500px) {
+            body { padding: 0; align-items: flex-start; }
+            .registration-container {
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                padding: var(--space-xl) var(--space-md);
+            }
+            .page-header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <header class="page-header">
+            <h1>Recruiter Registration</h1>
+            <p>Connect with top talent quickly and efficiently.</p>
+        </header>
+
+        <form class="registration-form" id="recruiterForm" novalidate>
+            <div id="form-message"></div>
+
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName">
+                <p class="validation-message" id="fullNameError"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="companyName">Company Name</label>
+                <input type="text" id="companyName" name="companyName">
+                <p class="validation-message" id="companyNameError"></p>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="email">Company Email</label>
+                <input type="email" id="email" name="email">
+                <p class="validation-message" id="emailError"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+                <p class="validation-message" id="passwordError"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="cinNumber">CIN Number</label>
+                <input type="text" id="cinNumber" name="cinNumber">
+                <p class="validation-message" id="cinNumberError"></p>
+            </div>
+            
+            <div class="form-group full-width">
+                <label for="linkedinProfile">LinkedIn Profile <span class="optional">(Optional)</span></label>
+                <input type="url" id="linkedinProfile" name="linkedinProfile">
+                <p class="validation-message" id="linkedinProfileError"></p>
+            </div>
+            
+            <div class="form-group">
+                <label for="employerId">Employer ID Upload</label>
+                <div class="file-upload-wrapper">
+                    <span class="file-upload-text" id="fileUploadText">Click to upload a file...</span>
+                    <input type="file" id="employerId" name="employerId" accept=".pdf,.jpg,.png">
+                </div>
+                <p class="validation-message" id="employerIdError"></p>
+            </div>
+            
+            <div class="form-group">
+                <label for="companyWebsite">Company Website URL</label>
+                <input type="url" id="companyWebsite" name="companyWebsite">
+                <p class="validation-message" id="companyWebsiteError"></p>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="captchaInput">Captcha Verification</label>
+                <div class="captcha-wrapper">
+                    <span id="captcha-text"></span>
+                    <input type="text" id="captchaInput" name="captchaInput" placeholder="Enter text">
+                </div>
+                <p class="validation-message" id="captchaError"></p>
+            </div>
+            
+            <button type="submit" class="btn-submit">Register</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('recruiterForm');
+            const formMessage = document.getElementById('form-message');
+            const fileUploadInput = document.getElementById('employerId');
+            const fileUploadText = document.getElementById('fileUploadText');
+            const captchaText = document.getElementById('captcha-text');
+            let captchaValue = '';
+
+            // Generate initial captcha
+            generateCaptcha();
+
+            fileUploadInput.addEventListener('change', () => {
+                if (fileUploadInput.files.length > 0) {
+                    fileUploadText.textContent = fileUploadInput.files[0].name;
+                    fileUploadText.classList.add('file-selected');
+                } else {
+                    fileUploadText.textContent = 'Click to upload a file...';
+                    fileUploadText.classList.remove('file-selected');
+                }
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (validateForm()) {
+                    showMainMessage('Registration successful! Welcome to JobAlign.', 'success');
+                    form.reset();
+                    fileUploadText.textContent = 'Click to upload a file...';
+                    fileUploadText.classList.remove('file-selected');
+                    generateCaptcha();
+                } else {
+                    showMainMessage('Please correct the errors below.', 'error');
+                }
+            });
+
+            function generateCaptcha() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let result = '';
+                for (let i = 0; i < 6; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                captchaValue = result;
+                captchaText.textContent = captchaValue;
+            }
+            
+            function validateForm() {
+                let isValid = true;
+                clearErrors();
+                
+                const fields = {
+                    fullName: { required: true, msg: 'Full Name is required.' },
+                    companyName: { required: true, msg: 'Company Name is required.' },
+                    email: { required: true, isEmail: true, msg: 'A valid email is required.' },
+                    password: { required: true, minLength: 8, msg: 'Password must be at least 8 characters.' },
+                    cinNumber: { required: true, msg: 'CIN Number is required.' },
+                    linkedinProfile: { isUrl: true, msg: 'Please enter a valid URL.' },
+                    employerId: { isFile: true, msg: 'Employer ID upload is required.' },
+                    companyWebsite: { required: true, isUrl: true, msg: 'A valid website URL is required.' },
+                    captchaInput: { required: true, isCaptcha: true, msg: 'Captcha does not match.' }
+                };
+
+                for (const fieldName in fields) {
+                    const input = document.getElementById(fieldName);
+                    const errorEl = document.getElementById(`${fieldName}Error`);
+                    const rules = fields[fieldName];
+
+                    if (rules.required && !input.value.trim()) {
+                        isValid = false;
+                        showError(input, errorEl, rules.msg);
+                    } else if (rules.isEmail && !/^\S+@\S+\.\S+$/.test(input.value)) {
+                        isValid = false;
+                        showError(input, errorEl, rules.msg);
+                    } else if (rules.minLength && input.value.length < rules.minLength) {
+                         isValid = false;
+                        showError(input, errorEl, rules.msg);
+                    } else if (rules.isUrl && input.value && !/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(input.value)) {
+                         isValid = false;
+                        showError(input, errorEl, rules.msg);
+                    } else if (rules.isFile && input.files.length === 0) {
+                        isValid = false;
+                        showError(null, errorEl, rules.msg);
+                    } else if (rules.isCaptcha && input.value.trim() !== captchaValue) {
+                        isValid = false;
+                        showError(input, errorEl, rules.msg);
+                        generateCaptcha();
+                    }
+                }
+                
+                return isValid;
+            }
+            
+            function showError(input, errorElement, message) {
+                if (input) input.classList.add('input-error');
+                if (errorElement) errorElement.textContent = message;
+            }
+
+            function showMainMessage(message, type) {
+                formMessage.textContent = message;
+                formMessage.className = type;
+            }
+
+            function clearErrors() {
+                formMessage.textContent = '';
+                formMessage.className = '';
+                document.querySelectorAll('.validation-message').forEach(el => el.textContent = '');
+                document.querySelectorAll('.form-group input').forEach(el => el.classList.remove('input-error'));
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seeker Dashboard - JobAlign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <style>
+        /* 1. Global Reset and Variables */
+        :root {
+            --color-primary: #2563EB; /* Blue accent */
+            --color-primary-light: #EFF6FF;
+            --color-dark: #0F172A;   /* Dark Blue/Black for text */
+            --color-secondary: #64748B; /* Gray for body text */
+            --color-light: #F1F5F9;   /* Light gray for backgrounds */
+            --color-white: #FFFFFF;
+            --color-border: #E2E8F0;
+            --color-success: #22C55E;
+            
+            --font-family-sans: 'Inter', sans-serif;
+            --border-radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-light);
+            color: var(--color-secondary);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* 2. Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        /* 3. Reusable Components */
+        .card {
+            background-color: var(--color-white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.65rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: #1D4ED8;
+        }
+
+        .badge {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* 4. Header */
+        .header {
+            background-color: var(--color-white);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-dark);
+        }
+
+        .logo i {
+            color: var(--color-primary);
+            background-color: var(--color-primary-light);
+            padding: 0.5rem;
+            border-radius: 50%;
+        }
+
+        .search-bar {
+            display: none;
+            position: relative;
+        }
+
+        .search-bar input {
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            width: 300px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-secondary);
+        }
+
+        .main-nav ul {
+            display: none;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .main-nav a {
+            font-weight: 500;
+            color: var(--color-secondary);
+            transition: var(--transition-fast);
+        }
+
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--color-primary);
+        }
+        
+        .menu-toggle {
+            display: block;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--color-dark);
+        }
+
+        @media (min-width: 768px) {
+            .search-bar { display: block; }
+        }
+
+        @media (min-width: 1024px) {
+            .main-nav ul { display: flex; }
+            .menu-toggle { display: none; }
+        }
+
+        /* 5. Main Content Area */
+        .welcome-header h1 {
+            font-size: 2.25rem;
+            color: var(--color-dark);
+            margin-bottom: 1rem;
+        }
+
+        .profile-completion .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-completion h3 {
+            color: var(--color-dark);
+            font-weight: 600;
+        }
+
+        .profile-completion .percentage {
+            font-weight: 700;
+            color: var(--color-dark);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: var(--color-light);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--color-primary);
+            border-radius: 5px;
+            width: 0%; /* JS will set this */
+            transition: width 0.5s ease-in-out;
+        }
+        
+        /* Job Recommendations */
+        .job-recommendations h2 {
+            font-size: 1.5rem;
+            color: var(--color-dark);
+            margin-bottom: 1.5rem;
+        }
+        
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filters .btn {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-border);
+            color: var(--color-secondary);
+            padding: 0.5rem 1rem;
+        }
+
+        .filters .btn i {
+            margin-left: 0.5rem;
+        }
+
+        .filters .btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+        
+        .job-listings {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .job-listings { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .job-card {
+            border: 1px solid var(--color-border);
+            transition: var(--transition-fast);
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .job-card h3 {
+            color: var(--color-dark);
+            font-size: 1.125rem;
+        }
+        
+        .job-card .company {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .job-details {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .job-details li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .job-card .apply-btn {
+            width: 100%;
+        }
+
+        /* 6. Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar .card h3 {
+            font-size: 1.25rem;
+            color: var(--color-dark);
+            margin-bottom: 1rem;
+        }
+
+        .applications-list li, .notifications-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .applications-list li:last-child, .notifications-list li:last-child {
+            border-bottom: none;
+        }
+
+        .profile-snapshot {
+            text-align: center;
+        }
+
+        .profile-snapshot img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 3px solid var(--color-primary-light);
+        }
+
+        .resume-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .resume-status i {
+            color: var(--color-success);
+        }
+
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .skills-tags span {
+            background-color: var(--color-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .notifications-list p {
+            font-size: 0.9rem;
+        }
+        
+        .notifications-list .time {
+            font-size: 0.8rem;
+            color: var(--color-secondary);
+            white-space: nowrap;
+            margin-left: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <header class="header">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-check-double"></i>
+                <span>JobAlign</span>
+            </a>
+            <div class="search-bar">
+                <i class="fa-solid fa-search"></i>
+                <input type="search" placeholder="Search for jobs...">
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#" class="active">Dashboard</a></li>
+                    <li><a href="jobsforjobseeker.html">Jobs</a></li>
+                    <li><a href="applicationsforjobseeker.html">Applications</a></li>
+                    <li><a href="profileforjobseeker.html">Profile</a></li>
+                    <li><a href="settingsforjobseeker.html">Settings</a></li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" aria-label="Toggle Navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </header>
+
+        <main class="main-content">
+            <div class="main-dashboard">
+                <div class="welcome-header">
+                    <h1>Hello Mahesh 👋</h1>
+                </div>
+
+                <section class="profile-completion card">
+                    <div class="card-header">
+                        <h3>Profile Completion</h3>
+                        <span class="percentage" id="profile-percentage">80%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" id="profile-progress"></div>
+                    </div>
+                </section>
+
+                <section class="job-recommendations">
+                    <h2>Job Recommendations</h2>
+                    <div class="filters">
+                        <button class="btn"><i class="fa-solid fa-location-dot"></i> Location</button>
+                        <button class="btn"><i class="fa-solid fa-briefcase"></i> Job Type</button>
+                        <button class="btn"><i class="fa-solid fa-wallet"></i> Salary</button>
+                        <button class="btn">Skills <i class="fa-solid fa-chevron-down"></i></button>
+                    </div>
+                    <div class="job-listings" id="job-listings">
+                        </div>
+                </section>
+            </div>
+
+            <aside class="sidebar">
+                <div class="my-applications card">
+                    <h3>My Applications</h3>
+                    <ul class="applications-list">
+                        <li><span>Pending</span> <span class="badge" id="pending-count">0</span></li>
+                        <li><span>Shortlisted</span> <span class="badge" id="shortlisted-count">1</span></li>
+                        <li><span>Rejected</span> <span class="badge" id="rejected-count">0</span></li>
+                        <li><span>Selected</span> <span class="badge" id="selected-count">0</span></li>
+                    </ul>
+                </div>
+
+                <div class="profile-snapshot card">
+                    <h3>Profile Snapshot</h3>
+                    <img src="../data/images/mahi.jpg" alt="Mahesh's Profile Picture">
+                    <div class="resume-status">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Resume Uploaded</span>
+                    </div>
+                    <div class="skills-tags">
+                        <span>Python</span>
+                        <span>SQL</span>
+                        <span>Data Analysis</span>
+                    </div>
+                </div>
+
+                <div class="notifications card">
+                    <h3>Notifications</h3>
+                    <ul class="notifications-list" id="notifications-list">
+                        </ul>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- MOCK DATA ---
+            const userName = "Mahesh";
+            const profileCompletion = 80;
+
+            const applicationStatus = {
+                pending: 2,
+                shortlisted: 1,
+                rejected: 0,
+                selected: 0,
+            };
+
+            const jobRecommendations = [
+                {
+                    title: "Front End Developer",
+                    company: "Zerodha",
+                    location: "Hyderabad",
+                    salary: "2L - 4L",
+                    skills: "React, JavaScript, CSS",
+                },
+                {
+                    title: "Data Analyst",
+                    company: "Paytm",
+                    location: "Vizag",
+                    salary: "6L",
+                    skills: "SQL, Python, Tableau",
+                },
+                {
+                    title: "UI/UX Designer",
+                    company: "Swiggy",
+                    location: "Bangalore",
+                    salary: "5L - 8L",
+                    skills: "Figma, Adobe XD, Sketch",
+                },
+                {
+                    title: "Backend Engineer",
+                    company: "Google",
+                    location: "Remote",
+                    salary: "10L - 15L",
+                    skills: "Node.js, Go, Kubernetes",
+                }
+            ];
+            
+            const notifications = [
+                { message: 'Your application for Data Analyst was viewed.', time: '2h ago' },
+                { message: 'New jobs matching your profile are available.', time: '1d ago' },
+                { message: 'Welcome to JobAlign! Complete your profile.', time: '3d ago' },
+            ];
+
+            // --- DOM Elements ---
+            const profileProgress = document.getElementById('profile-progress');
+            const profilePercentage = document.getElementById('profile-percentage');
+            const jobListingsContainer = document.getElementById('job-listings');
+            const pendingCountEl = document.getElementById('pending-count');
+            const notificationsListEl = document.getElementById('notifications-list');
+
+            // --- FUNCTIONS ---
+
+            // 1. Update Profile Completion Bar
+            function updateProfileCompletion(percentage) {
+                profilePercentage.textContent = `${percentage}%`;
+                profileProgress.style.width = `${percentage}%`;
+            }
+
+            // 2. Render Job Recommendations
+            function renderJobCards() {
+                jobListingsContainer.innerHTML = ''; // Clear existing listings
+                jobRecommendations.forEach(job => {
+                    const jobCard = document.createElement('div');
+                    jobCard.className = 'card job-card';
+                    jobCard.innerHTML = `
+                        <h3>${job.title}</h3>
+                        <p class="company">${job.company}</p>
+                        <ul class="job-details">
+                            <li><strong>Location:</strong> ${job.location}</li>
+                            <li><strong>Salary:</strong> ${job.salary}</li>
+                            <li><strong>Skills:</strong> ${job.skills}</li>
+                        </ul>
+                        <button class="btn btn-primary apply-btn" data-job-title="${job.title}">Apply</button>
+                    `;
+                    jobListingsContainer.appendChild(jobCard);
+                });
+            }
+            
+            // 3. Update Application Counters
+            function updateApplicationCounts() {
+                pendingCountEl.textContent = applicationStatus.pending;
+                // You can update other statuses similarly
+                document.getElementById('shortlisted-count').textContent = applicationStatus.shortlisted;
+                document.getElementById('rejected-count').textContent = applicationStatus.rejected;
+                document.getElementById('selected-count').textContent = applicationStatus.selected;
+            }
+            
+            // 4. Render Notifications
+            function renderNotifications() {
+                notificationsListEl.innerHTML = '';
+                notifications.forEach(notif => {
+                    const item = document.createElement('li');
+                    item.innerHTML = `
+                        <p>${notif.message}</p>
+                        <span class="time">${notif.time}</span>
+                    `;
+                    notificationsListEl.appendChild(item);
+                });
+            }
+
+            // --- EVENT LISTENERS ---
+
+            // Handle "Apply" button clicks using event delegation
+            jobListingsContainer.addEventListener('click', (event) => {
+                if (event.target.classList.contains('apply-btn')) {
+                    const jobTitle = event.target.dataset.jobTitle;
+                    
+                    // Show confirmation alert
+                    alert(`Application submitted for ${jobTitle}`);
+                    
+                    // Update application status and UI
+                    applicationStatus.pending++;
+                    updateApplicationCounts();
+                }
+            });
+
+            // --- INITIALIZATION ---
+            function initializeDashboard() {
+                document.querySelector('.welcome-header h1').innerHTML = `Hello ${userName} 👋`;
+                updateProfileCompletion(profileCompletion);
+                renderJobCards();
+                updateApplicationCounts();
+                renderNotifications();
+            }
+
+            initializeDashboard();
+        });
+    </script>
+</body>
+</html>

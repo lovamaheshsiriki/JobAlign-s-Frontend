@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Jobs - JobAlign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <style>
+        /* 1. Global Reset and Variables */
+        :root {
+            --color-primary: #2563EB; /* Blue */
+            --color-primary-light: #EFF6FF;
+            --color-dark: #0F172A;   /* Dark Blue/Black for text */
+            --color-secondary: #64748B; /* Gray for body text */
+            --color-light: #F8FAFC;   /* Light gray for backgrounds */
+            --color-white: #FFFFFF;
+            --color-border: #E2E8F0;
+            --color-success: #22C55E;
+            
+            --font-family-sans: 'Inter', sans-serif;
+            --border-radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-light);
+            color: var(--color-secondary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* 2. Header / Navbar */
+        .header {
+            background-color: var(--color-white);
+            padding: 1rem 1.5rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--color-primary);
+        }
+
+        .main-nav ul {
+            display: none;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .main-nav a {
+            font-weight: 500;
+            color: var(--color-secondary);
+            transition: var(--transition-fast);
+            text-decoration: none;
+            padding-bottom: 0.5rem;
+        }
+
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .profile-icon img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .menu-toggle {
+            display: block;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--color-dark);
+        }
+
+        @media (min-width: 768px) {
+            .main-nav ul { display: flex; }
+            .menu-toggle { display: none; }
+        }
+
+        /* 3. Search and Filters */
+        .search-filters-section {
+            background-color: var(--color-white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .filter-grid {
+                grid-template-columns: 2fr 1fr;
+                align-items: flex-end;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .filter-grid {
+                 grid-template-columns: 3fr repeat(4, 1fr);
+            }
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-secondary);
+        }
+        
+        .filter-item select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            background-color: var(--color-white);
+            color: var(--color-secondary);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
+        .filter-item .btn {
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-block;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: center;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-color: var(--color-primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #1D4ED8;
+            border-color: #1D4ED8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+        }
+        
+        .btn-secondary {
+             background-color: var(--color-white);
+             color: var(--color-dark);
+             border: 1px solid var(--color-border);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        /* 4. Job Listings */
+        .job-listings-section {
+            padding-bottom: 2rem;
+        }
+        
+        .job-listings-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .job-card {
+            background-color: var(--color-white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--color-border);
+            transition: var(--transition-fast);
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-primary);
+        }
+
+        .job-card h3 {
+            margin-bottom: 0.25rem;
+        }
+
+        .job-card h3 a {
+            color: var(--color-dark);
+            text-decoration: none;
+            font-size: 1.25rem;
+        }
+        
+        .job-card h3 a:hover {
+            text-decoration: underline;
+        }
+
+        .job-card .company {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .job-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .skills-tags span {
+            background-color: var(--color-primary-light);
+            color: var(--color-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .save-job-btn.saved {
+            background-color: var(--color-primary-light);
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+        
+        .save-job-btn.saved .fa-bookmark {
+            font-weight: 900; /* Solid icon */
+        }
+        
+        /* 5. Pagination / Load More */
+        .pagination-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="navbar">
+            <a href="jobseeker-dashboard.html" class="logo">
+                <i class="fa-solid fa-check-double"></i>
+                <span>JobAlign</span>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="jobseeker-dashboard.html">Dashboard</a></li>
+                    <li><a href="#" class="active">Jobs</a></li>
+                    <li><a href="applicationsforjobseeker.html">Applications</a></li>
+                    <li><a href="profileforjobseeker.html">Profile</a></li>
+                    <li><a href="settingsforjobseeker.html">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="profile-icon">
+                <a href="profileforjobseeker.html"><img src="../data/images/mahi.jpg" alt="Profile"></a>
+            </div>
+            <button class="menu-toggle" aria-label="Toggle Navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Search and Filters Section -->
+        <section class="search-filters-section">
+            <div class="filter-grid">
+                <div class="filter-item search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="search" placeholder="Search for jobs...">
+                </div>
+                <div class="filter-item">
+                     <select>
+                        <option>Location</option>
+                        <option>Hyderabad</option>
+                        <option>Bangalore</option>
+                        <option>Remote</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                     <select>
+                        <option>Salary Range</option>
+                        <option>0-5 LPA</option>
+                        <option>5-10 LPA</option>
+                        <option>10-20 LPA</option>
+                    </select>
+                </div>
+                 <div class="filter-item">
+                     <select>
+                        <option>Skills</option>
+                        <option>JavaScript</option>
+                        <option>Python</option>
+                        <option>SQL</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                     <select>
+                        <option>Job Type</option>
+                        <option>Full-time</option>
+                        <option>Part-time</option>
+                        <option>Contract</option>
+                    </select>
+                </div>
+                 <div class="filter-item">
+                     <button class="btn btn-primary">Search</button>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Job Listings -->
+        <section class="job-listings-section">
+            <div class="job-listings-grid" id="job-listings-grid">
+                <!-- Job cards will be inserted here by JavaScript -->
+            </div>
+             <div class="pagination-container">
+                <button class="btn btn-primary" id="load-more-btn">Load More Jobs</button>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- MOCK DATA ---
+            const allJobs = [
+                { id: 1, title: "Front End Developer", company: "Zerodha", location: "Hyderabad", salary: "2L - 4L", skills: ["React", "JavaScript", "CSS"], saved: false },
+                { id: 2, title: "Data Analyst", company: "Paytm", location: "Vizag", salary: "6 LPA", skills: ["SQL", "Python", "Tableau"], saved: true },
+                { id: 3, title: "UI/UX Designer", company: "Swiggy", location: "Bangalore", salary: "5L - 8L", skills: ["Figma", "Adobe XD", "Sketch"], saved: false },
+                { id: 4, title: "Backend Engineer", company: "Google", location: "Remote", salary: "10L - 15L", skills: ["Node.js", "Go", "Kubernetes"], saved: false },
+                { id: 5, title: "Product Manager", company: "Microsoft", location: "Hyderabad", salary: "15L - 25L", skills: ["Agile", "Roadmapping", "JIRA"], saved: false },
+                { id: 6, title: "DevOps Engineer", company: "Amazon", location: "Bangalore", salary: "8L - 12L", skills: ["AWS", "Docker", "CI/CD"], saved: true },
+                { id: 7, title: "Full Stack Developer", company: "Netflix", location: "Remote", salary: "12L - 18L", skills: ["React", "Node.js", "GraphQL"], saved: false },
+                { id: 8, title: "Data Scientist", company: "Flipkart", location: "Bangalore", salary: "20L+", skills: ["Machine Learning", "Python", "TensorFlow"], saved: false },
+                { id: 9, title: "Cloud Architect", company: "Oracle", location: "Hyderabad", salary: "25L+", skills: ["OCI", "Azure", "Cloud Security"], saved: false },
+                { id: 10, title: "Mobile App Developer", company: "Zomato", location: "Remote", salary: "7L - 10L", skills: ["React Native", "Swift", "Kotlin"], saved: false },
+            ];
+
+            // --- STATE ---
+            let jobsToDisplay = 4;
+            let currentJobs = [];
+            
+            // --- DOM Elements ---
+            const jobGrid = document.getElementById('job-listings-grid');
+            const loadMoreBtn = document.getElementById('load-more-btn');
+
+            // --- FUNCTIONS ---
+            const createSkillTag = (skill) => `<span>${skill}</span>`;
+            
+            const createJobCardHTML = (job) => {
+                const savedClass = job.saved ? 'saved' : '';
+                const savedText = job.saved ? 'Saved' : 'Save Job';
+                const skillsHTML = job.skills.map(createSkillTag).join('');
+                
+                return `
+                    <div class="job-card" data-job-id="${job.id}">
+                        <h3><a href="#">${job.title}</a></h3>
+                        <p class="company">${job.company}</p>
+                        <div class="job-meta">
+                            <span><i class="fa-solid fa-location-dot"></i> ${job.location}</span>
+                            <span><i class="fa-solid fa-wallet"></i> ${job.salary}</span>
+                        </div>
+                        <div class="skills-tags">${skillsHTML}</div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary">Apply</button>
+                            <button class="btn btn-secondary save-job-btn ${savedClass}">
+                                <i class="fa-regular fa-bookmark"></i> ${savedText}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            };
+            
+            const renderJobs = () => {
+                jobGrid.innerHTML = ''; // Clear the grid
+                currentJobs = allJobs.slice(0, jobsToDisplay);
+                const jobsHTML = currentJobs.map(createJobCardHTML).join('');
+                jobGrid.innerHTML = jobsHTML;
+                
+                // Hide 'Load More' if all jobs are shown
+                if(jobsToDisplay >= allJobs.length) {
+                    loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.style.display = 'inline-block';
+                }
+            };
+            
+            const handleSaveJobClick = (e) => {
+                if (!e.target.classList.contains('save-job-btn')) return;
+                
+                const button = e.target;
+                const card = button.closest('.job-card');
+                const jobId = parseInt(card.dataset.jobId);
+                
+                // Find job in the main array and toggle its saved state
+                const job = allJobs.find(j => j.id === jobId);
+                if (job) {
+                    job.saved = !job.saved;
+                    
+                    // Update button appearance
+                    button.classList.toggle('saved');
+                    button.innerHTML = job.saved 
+                        ? '<i class="fa-solid fa-bookmark"></i> Saved' 
+                        : '<i class="fa-regular fa-bookmark"></i> Save Job';
+                }
+            };
+            
+            const handleLoadMore = () => {
+                jobsToDisplay += 4;
+                renderJobs();
+            };
+
+            // --- EVENT LISTENERS ---
+            jobGrid.addEventListener('click', handleSaveJobClick);
+            loadMoreBtn.addEventListener('click', handleLoadMore);
+
+            // --- INITIALIZATION ---
+            renderJobs();
+        });
+    </script>
+</body>
+</html>
+

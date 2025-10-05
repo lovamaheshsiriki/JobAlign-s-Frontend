@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicants - JobAlign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <style>
+        /* 1. Global Reset and Variables */
+        :root {
+            --color-primary: #2563EB; /* Blue */
+            --color-primary-light: #EFF6FF;
+            --color-dark: #0F172A;   /* Dark Blue/Black for text */
+            --color-secondary: #64748B; /* Gray for body text */
+            --color-light: #F8FAFC;   /* Light gray for backgrounds */
+            --color-white: #FFFFFF;
+            --color-border: #E2E8F0;
+            
+            /* Status Colors */
+            --color-pending-bg: #FEF3C7; --color-pending-text: #B45309;
+            --color-shortlisted-bg: #D1FAE5; --color-shortlisted-text: #065F46;
+            --color-rejected-bg: #FEE2E2; --color-rejected-text: #991B1B;
+            
+            --font-family-sans: 'Inter', sans-serif;
+            --border-radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition-fast: 0.2s ease-in-out;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-family-sans); background-color: var(--color-light);
+            color: var(--color-secondary); line-height: 1.6;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+        /* 2. Header / Navbar */
+        .header {
+            background-color: var(--color-white); padding: 1rem 1.5rem;
+            box-shadow: var(--shadow); position: sticky; top: 0; z-index: 1000;
+        }
+        .navbar {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem; font-size: 1.5rem;
+            font-weight: 700; color: var(--color-dark); text-decoration: none;
+        }
+        .logo i { color: var(--color-primary); }
+        .main-nav ul { display: none; list-style: none; gap: 2rem; }
+        .main-nav a {
+            font-weight: 500; color: var(--color-secondary); transition: var(--transition-fast);
+            text-decoration: none; padding-bottom: 0.5rem;
+        }
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--color-primary); border-bottom: 2px solid var(--color-primary);
+        }
+        .profile-icon img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+        .menu-toggle { display: block; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-dark); }
+        @media (min-width: 992px) {
+            .main-nav ul { display: flex; }
+            .menu-toggle { display: none; }
+        }
+
+        /* 3. Main Layout & Card */
+        .card {
+            background-color: var(--color-white); padding: 1.5rem;
+            border-radius: var(--border-radius); box-shadow: var(--shadow);
+        }
+        .card-header {
+            padding-bottom: 1rem; margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .card-header h1 { color: var(--color-dark); }
+        
+        /* 4. Filters */
+        .filters-bar {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .filters-bar { grid-template-columns: 2fr 1fr 1fr; }
+        }
+        .search-bar { position: relative; }
+        .search-bar input, .filters-bar select {
+            width: 100%; padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border); border-radius: 0.5rem; font-size: 1rem;
+        }
+        .search-bar i {
+            position: absolute; left: 1rem; top: 50%;
+            transform: translateY(-50%); color: var(--color-secondary);
+        }
+        .search-bar input { padding-left: 2.5rem; }
+
+        /* 5. Applicants Table */
+        .table-wrapper { overflow-x: auto; }
+        table {
+            width: 100%; border-collapse: collapse; text-align: left;
+        }
+        th, td { padding: 1rem; border-bottom: 1px solid var(--color-border); }
+        th { font-weight: 600; color: var(--color-dark); white-space: nowrap; }
+        tbody tr { transition: var(--transition-fast); }
+        tbody tr:hover { background-color: var(--color-light); }
+        
+        .applicant-info { display: flex; align-items: center; gap: 0.75rem; }
+        .applicant-info img { width: 40px; height: 40px; border-radius: 50%; }
+        .applicant-name {
+            font-weight: 600; color: var(--color-dark);
+            text-decoration: none; cursor: pointer;
+        }
+        .applicant-name:hover { color: var(--color-primary); }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem; border-radius: 999px;
+            font-weight: 600; font-size: 0.8rem;
+        }
+        .status-badge.Pending { background-color: var(--color-pending-bg); color: var(--color-pending-text); }
+        .status-badge.Shortlisted { background-color: var(--color-shortlisted-bg); color: var(--color-shortlisted-text); }
+        .status-badge.Rejected { background-color: var(--color-rejected-bg); color: var(--color-rejected-text); }
+        
+        .action-buttons { display: flex; gap: 0.5rem; }
+        .btn-action {
+            background: none; border: 1px solid var(--color-border);
+            border-radius: 0.5rem; padding: 0.5rem 1rem; cursor: pointer;
+            transition: var(--transition-fast); font-weight: 500;
+        }
+        .btn-action:hover { border-color: var(--color-primary); color: var(--color-primary); }
+        
+        .no-results { text-align: center; padding: 2rem; }
+
+        /* 6. Profile Modal */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+            width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe; margin: auto; border: 1px solid #888;
+            width: 90%; max-width: 700px; border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        .modal-header {
+            padding: 1rem 1.5rem; border-bottom: 1px solid var(--color-border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-header h2 { color: var(--color-dark); }
+        .close-btn { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .modal-body { padding: 1.5rem; }
+        .profile-summary { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .profile-summary img { width: 80px; height: 80px; border-radius: 50%; }
+        .profile-section { margin-bottom: 1.5rem; }
+        .profile-section h3 { color: var(--color-dark); margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="navbar">
+            <a href="recruiter-dashboard.html" class="logo"><i class="fa-solid fa-check-double"></i><span>JobAlign</span></a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="recruiter-dashboard.html">Dashboard</a></li>
+                    <li><a href="postjob.html">Post Job</a></li>
+                    <li><a href="#" class="active">Applicants</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="settings.html">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="profile-icon"><a href="profile.html"><img src="..\data\images\Mahi.jpg" alt="Profile"></a></div>
+            <button class="menu-toggle" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>Applicants Management</h1>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Search by applicant name...">
+                </div>
+                <select id="job-filter">
+                    <option value="All">All Jobs</option>
+                    <!-- Job options will be populated by JS -->
+                </select>
+                <select id="status-filter">
+                    <option value="All">All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Shortlisted">Shortlisted</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+
+            <!-- Applicants Table -->
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Applicant Name</th>
+                            <th>Job Applied For</th>
+                            <th>Application Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applicants-tbody">
+                        <!-- Applicant rows will be rendered here -->
+                    </tbody>
+                </table>
+            </div>
+             <div id="no-results" class="no-results" style="display: none;">
+                <p>No applicants found matching your criteria.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Applicant Profile Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-applicant-name">Applicant Profile</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="profile-summary">
+                    <img id="modal-avatar" src="" alt="Applicant Avatar">
+                    <div>
+                        <h2 id="modal-name-title"></h2>
+                        <p id="modal-job-applied"></p>
+                    </div>
+                </div>
+                <div class="profile-section">
+                    <h3>Skills</h3>
+                    <p id="modal-skills"></p>
+                </div>
+                <div class="profile-section">
+                    <h3>Experience</h3>
+                    <p id="modal-experience"></p>
+                </div>
+                <div class="profile-section">
+                    <h3>Education</h3>
+                    <p id="modal-education"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- MOCK DATA ---
+            let allApplicants = [
+                { id: 1, name: 'Priya Sharma', avatar: 'https://i.pravatar.cc/150?u=priya', jobTitle: 'Senior Frontend Developer', appliedOn: '2025-10-03', status: 'Shortlisted', skills: 'React, TypeScript, GraphQL', experience: '5 years at Google', education: 'B.Tech CSE' },
+                { id: 2, name: 'Rohan Verma', avatar: 'https://i.pravatar.cc/150?u=rohan', jobTitle: 'Product Designer', appliedOn: '2025-10-02', status: 'Pending', skills: 'Figma, UI/UX Research, Prototyping', experience: '3 years at Swiggy', education: 'M.Des' },
+                { id: 3, name: 'Anjali Mehta', avatar: 'https://i.pravatar.cc/150?u=anjali', jobTitle: 'DevOps Engineer', appliedOn: '2025-09-30', status: 'Shortlisted', skills: 'AWS, Kubernetes, CI/CD', experience: '4 years at Amazon', education: 'B.E IT' },
+                { id: 4, name: 'Vikram Singh', avatar: 'https://i.pravatar.cc/150?u=vikram', jobTitle: 'Data Scientist', appliedOn: '2025-09-29', status: 'Rejected', skills: 'Python, ML, TensorFlow', experience: '6 years at Flipkart', education: 'M.S. Data Science' },
+                { id: 5, name: 'Neha Reddy', avatar: 'https://i.pravatar.cc/150?u=neha', jobTitle: 'Senior Frontend Developer', appliedOn: '2025-09-28', status: 'Pending', skills: 'Vue.js, Nuxt, CSS3', experience: '4 years at Microsoft', education: 'B.Tech ECE' }
+            ];
+
+            // --- STATE ---
+            let currentFilters = { search: '', job: 'All', status: 'All' };
+
+            // --- DOM Elements ---
+            const tbody = document.getElementById('applicants-tbody');
+            const searchInput = document.getElementById('search-input');
+            const jobFilter = document.getElementById('job-filter');
+            const statusFilter = document.getElementById('status-filter');
+            const noResultsEl = document.getElementById('no-results');
+
+            // --- RENDER FUNCTION ---
+            const renderApplicants = () => {
+                let filteredApplicants = allApplicants.filter(applicant => {
+                    const searchMatch = applicant.name.toLowerCase().includes(currentFilters.search.toLowerCase());
+                    const jobMatch = currentFilters.job === 'All' || applicant.jobTitle === currentFilters.job;
+                    const statusMatch = currentFilters.status === 'All' || applicant.status === currentFilters.status;
+                    return searchMatch && jobMatch && statusMatch;
+                });
+                
+                tbody.innerHTML = '';
+                noResultsEl.style.display = filteredApplicants.length === 0 ? 'block' : 'none';
+
+                filteredApplicants.forEach(applicant => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <div class="applicant-info">
+                                <img src="${applicant.avatar}" alt="${applicant.name}">
+                                <a href="#" class="applicant-name" data-action="view-profile" data-id="${applicant.id}">${applicant.name}</a>
+                            </div>
+                        </td>
+                        <td>${applicant.jobTitle}</td>
+                        <td>${applicant.appliedOn}</td>
+                        <td><span class="status-badge ${applicant.status}">${applicant.status}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-action" data-action="shortlist" data-id="${applicant.id}">Shortlist</button>
+                                <button class="btn-action" data-action="reject" data-id="${applicant.id}">Reject</button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            };
+
+            // --- Populate Job Filter ---
+            const populateJobFilter = () => {
+                const jobTitles = [...new Set(allApplicants.map(app => app.jobTitle))];
+                jobTitles.forEach(title => {
+                    const option = document.createElement('option');
+                    option.value = title;
+                    option.textContent = title;
+                    jobFilter.appendChild(option);
+                });
+            };
+
+            // --- EVENT LISTENERS ---
+            searchInput.addEventListener('input', (e) => {
+                currentFilters.search = e.target.value;
+                renderApplicants();
+            });
+            jobFilter.addEventListener('change', (e) => {
+                currentFilters.job = e.target.value;
+                renderApplicants();
+            });
+            statusFilter.addEventListener('change', (e) => {
+                currentFilters.status = e.target.value;
+                renderApplicants();
+            });
+            
+            tbody.addEventListener('click', e => {
+                const target = e.target;
+                const action = target.dataset.action;
+                const id = parseInt(target.dataset.id);
+
+                if (!action || !id) return;
+                
+                const applicantIndex = allApplicants.findIndex(app => app.id === id);
+                if (applicantIndex === -1) return;
+
+                switch (action) {
+                    case 'shortlist':
+                        allApplicants[applicantIndex].status = 'Shortlisted';
+                        break;
+                    case 'reject':
+                        allApplicants[applicantIndex].status = 'Rejected';
+                        break;
+                    case 'view-profile':
+                        openProfileModal(allApplicants[applicantIndex]);
+                        break;
+                }
+                
+                if (action === 'shortlist' || action === 'reject') {
+                    renderApplicants();
+                }
+            });
+
+            // --- MODAL LOGIC ---
+            const modal = document.getElementById('profile-modal');
+            const closeBtn = document.querySelector('.modal .close-btn');
+
+            const openProfileModal = (applicant) => {
+                document.getElementById('modal-applicant-name').textContent = `${applicant.name}'s Profile`;
+                document.getElementById('modal-avatar').src = applicant.avatar;
+                document.getElementById('modal-name-title').textContent = applicant.name;
+                document.getElementById('modal-job-applied').textContent = `Applied for: ${applicant.jobTitle}`;
+                document.getElementById('modal-skills').textContent = applicant.skills;
+                document.getElementById('modal-experience').textContent = applicant.experience;
+                document.getElementById('modal-education').textContent = applicant.education;
+                modal.style.display = 'flex';
+            };
+
+            const closeModal = () => {
+                modal.style.display = 'none';
+            };
+
+            closeBtn.addEventListener('click', closeModal);
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            // --- INITIALIZATION ---
+            populateJobFilter();
+            renderApplicants();
+        });
+    </script>
+</body>
+</html>
