@@ -7,30 +7,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+
     <style>
         /* 1. Global Reset and Variables */
         :root {
-            --color-primary: #2563EB; /* Blue */
+            --color-primary: #2563EB;
             --color-primary-light: #EFF6FF;
-            --color-dark: #0F172A;   /* Dark Blue/Black for text */
-            --color-secondary: #64748B; /* Gray for body text */
-            --color-light: #F8FAFC;   /* Light gray for backgrounds */
+            --color-dark: #0F172A;
+            --color-secondary: #64748B;
+            --color-light: #F8FAFC;
             --color-white: #FFFFFF;
             --color-border: #E2E8F0;
             --color-success: #22C55E;
-            
             --font-family-sans: 'Inter', sans-serif;
             --border-radius: 0.75rem;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+                      0 2px 4px -2px rgb(0 0 0 / 0.1);
             --transition-fast: 0.2s ease-in-out;
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: var(--font-family-sans);
@@ -38,7 +35,7 @@
             color: var(--color-secondary);
             line-height: 1.6;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -73,9 +70,7 @@
             text-decoration: none;
         }
 
-        .logo i {
-            color: var(--color-primary);
-        }
+        .logo i { color: var(--color-primary); }
 
         .main-nav ul {
             display: none;
@@ -91,7 +86,8 @@
             padding-bottom: 0.5rem;
         }
 
-        .main-nav a:hover, .main-nav a.active {
+        .main-nav a:hover,
+        .main-nav a.active {
             color: var(--color-primary);
             border-bottom: 2px solid var(--color-primary);
         }
@@ -102,7 +98,7 @@
             border-radius: 50%;
             cursor: pointer;
         }
-        
+
         .menu-toggle {
             display: block;
             font-size: 1.5rem;
@@ -110,6 +106,22 @@
             background: none;
             border: none;
             color: var(--color-dark);
+        }
+
+        /* ✅ Mobile active dropdown menu */
+        .main-nav ul.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background-color: var(--color-white);
+            width: 200px;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            gap: 1rem;
+            z-index: 1001;
         }
 
         @media (min-width: 768px) {
@@ -138,16 +150,14 @@
                 align-items: flex-end;
             }
         }
-        
+
         @media (min-width: 1024px) {
             .filter-grid {
-                 grid-template-columns: 3fr repeat(4, 1fr);
+                grid-template-columns: 3fr repeat(4, 1fr);
             }
         }
 
-        .search-bar {
-            position: relative;
-        }
+        .search-bar { position: relative; }
 
         .search-bar input {
             width: 100%;
@@ -164,7 +174,7 @@
             transform: translateY(-50%);
             color: var(--color-secondary);
         }
-        
+
         .filter-item select {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -173,14 +183,10 @@
             font-size: 1rem;
             background-color: var(--color-white);
             color: var(--color-secondary);
-            -webkit-appearance: none;
-            -moz-appearance: none;
             appearance: none;
         }
-        
-        .filter-item .btn {
-            width: 100%;
-        }
+
+        .filter-item .btn { width: 100%; }
 
         .btn {
             display: inline-block;
@@ -193,36 +199,34 @@
             border-radius: 0.5rem;
             font-size: 0.95rem;
         }
-        
+
         .btn-primary {
             background-color: var(--color-primary);
             color: var(--color-white);
             border-color: var(--color-primary);
         }
-        
+
         .btn-primary:hover {
             background-color: #1D4ED8;
             border-color: #1D4ED8;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
         }
-        
+
         .btn-secondary {
-             background-color: var(--color-white);
-             color: var(--color-dark);
-             border: 1px solid var(--color-border);
+            background-color: var(--color-white);
+            color: var(--color-dark);
+            border: 1px solid var(--color-border);
         }
-        
+
         .btn-secondary:hover {
             border-color: var(--color-primary);
             color: var(--color-primary);
         }
 
         /* 4. Job Listings */
-        .job-listings-section {
-            padding-bottom: 2rem;
-        }
-        
+        .job-listings-section { padding-bottom: 2rem; }
+
         .job-listings-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -243,24 +247,17 @@
             border-color: var(--color-primary);
         }
 
-        .job-card h3 {
-            margin-bottom: 0.25rem;
-        }
+        .job-card h3 { margin-bottom: 0.25rem; }
 
         .job-card h3 a {
             color: var(--color-dark);
             text-decoration: none;
             font-size: 1.25rem;
         }
-        
-        .job-card h3 a:hover {
-            text-decoration: underline;
-        }
 
-        .job-card .company {
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
+        .job-card h3 a:hover { text-decoration: underline; }
+
+        .job-card .company { font-weight: 500; margin-bottom: 1rem; }
 
         .job-meta {
             display: flex;
@@ -269,13 +266,9 @@
             margin-bottom: 1rem;
             font-size: 0.9rem;
         }
-        
-        .job-meta span {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
+
+        .job-meta span { display: flex; align-items: center; gap: 0.5rem; }
+
         .skills-tags {
             display: flex;
             flex-wrap: wrap;
@@ -291,22 +284,17 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        
-        .card-actions {
-            display: flex;
-            gap: 1rem;
-        }
+
+        .card-actions { display: flex; gap: 1rem; }
 
         .save-job-btn.saved {
             background-color: var(--color-primary-light);
             color: var(--color-primary);
             border-color: var(--color-primary);
         }
-        
-        .save-job-btn.saved .fa-bookmark {
-            font-weight: 900; /* Solid icon */
-        }
-        
+
+        .save-job-btn.saved .fa-bookmark { font-weight: 900; }
+
         /* 5. Pagination / Load More */
         .pagination-container {
             text-align: center;
@@ -315,7 +303,6 @@
     </style>
 </head>
 <body>
-
     <header class="header">
         <div class="navbar">
             <a href="jobseeker-dashboard.html" class="logo">
@@ -341,7 +328,7 @@
     </header>
 
     <main class="container">
-        <!-- Search and Filters Section -->
+        <!-- Search and Filters -->
         <section class="search-filters-section">
             <div class="filter-grid">
                 <div class="filter-item search-bar">
@@ -349,7 +336,7 @@
                     <input type="search" placeholder="Search for jobs...">
                 </div>
                 <div class="filter-item">
-                     <select>
+                    <select>
                         <option>Location</option>
                         <option>Hyderabad</option>
                         <option>Bangalore</option>
@@ -357,15 +344,15 @@
                     </select>
                 </div>
                 <div class="filter-item">
-                     <select>
+                    <select>
                         <option>Salary Range</option>
                         <option>0-5 LPA</option>
                         <option>5-10 LPA</option>
                         <option>10-20 LPA</option>
                     </select>
                 </div>
-                 <div class="filter-item">
-                     <select>
+                <div class="filter-item">
+                    <select>
                         <option>Skills</option>
                         <option>JavaScript</option>
                         <option>Python</option>
@@ -373,33 +360,31 @@
                     </select>
                 </div>
                 <div class="filter-item">
-                     <select>
+                    <select>
                         <option>Job Type</option>
                         <option>Full-time</option>
                         <option>Part-time</option>
                         <option>Contract</option>
                     </select>
                 </div>
-                 <div class="filter-item">
-                     <button class="btn btn-primary">Search</button>
-                 </div>
+                <div class="filter-item">
+                    <button class="btn btn-primary">Search</button>
+                </div>
             </div>
         </section>
 
         <!-- Job Listings -->
         <section class="job-listings-section">
-            <div class="job-listings-grid" id="job-listings-grid">
-                <!-- Job cards will be inserted here by JavaScript -->
-            </div>
-             <div class="pagination-container">
+            <div class="job-listings-grid" id="job-listings-grid"></div>
+            <div class="pagination-container">
                 <button class="btn btn-primary" id="load-more-btn">Load More Jobs</button>
             </div>
         </section>
     </main>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- MOCK DATA ---
+            // --- JOB DATA ---
             const allJobs = [
                 { id: 1, title: "Front End Developer", company: "Zerodha", location: "Hyderabad", salary: "2L - 4L", skills: ["React", "JavaScript", "CSS"], saved: false },
                 { id: 2, title: "Data Analyst", company: "Paytm", location: "Vizag", salary: "6 LPA", skills: ["SQL", "Python", "Tableau"], saved: true },
@@ -413,88 +398,72 @@
                 { id: 10, title: "Mobile App Developer", company: "Zomato", location: "Remote", salary: "7L - 10L", skills: ["React Native", "Swift", "Kotlin"], saved: false },
             ];
 
-            // --- STATE ---
             let jobsToDisplay = 4;
-            let currentJobs = [];
-            
-            // --- DOM Elements ---
             const jobGrid = document.getElementById('job-listings-grid');
             const loadMoreBtn = document.getElementById('load-more-btn');
 
-            // --- FUNCTIONS ---
-            const createSkillTag = (skill) => `<span>${skill}</span>`;
-            
-            const createJobCardHTML = (job) => {
-                const savedClass = job.saved ? 'saved' : '';
-                const savedText = job.saved ? 'Saved' : 'Save Job';
-                const skillsHTML = job.skills.map(createSkillTag).join('');
-                
-                return `
-                    <div class="job-card" data-job-id="${job.id}">
-                        <h3><a href="#">${job.title}</a></h3>
-                        <p class="company">${job.company}</p>
-                        <div class="job-meta">
-                            <span><i class="fa-solid fa-location-dot"></i> ${job.location}</span>
-                            <span><i class="fa-solid fa-wallet"></i> ${job.salary}</span>
-                        </div>
-                        <div class="skills-tags">${skillsHTML}</div>
-                        <div class="card-actions">
-                            <button class="btn btn-primary">Apply</button>
-                            <button class="btn btn-secondary save-job-btn ${savedClass}">
-                                <i class="fa-regular fa-bookmark"></i> ${savedText}
-                            </button>
-                        </div>
+            const createJobCard = (job) => `
+                <div class="job-card" data-job-id="${job.id}">
+                    <h3><a href="#">${job.title}</a></h3>
+                    <p class="company">${job.company}</p>
+                    <div class="job-meta">
+                        <span><i class="fa-solid fa-location-dot"></i> ${job.location}</span>
+                        <span><i class="fa-solid fa-wallet"></i> ${job.salary}</span>
                     </div>
-                `;
-            };
-            
-            const renderJobs = () => {
-                jobGrid.innerHTML = ''; // Clear the grid
-                currentJobs = allJobs.slice(0, jobsToDisplay);
-                const jobsHTML = currentJobs.map(createJobCardHTML).join('');
-                jobGrid.innerHTML = jobsHTML;
-                
-                // Hide 'Load More' if all jobs are shown
-                if(jobsToDisplay >= allJobs.length) {
-                    loadMoreBtn.style.display = 'none';
-                } else {
-                    loadMoreBtn.style.display = 'inline-block';
-                }
-            };
-            
-            const handleSaveJobClick = (e) => {
-                if (!e.target.classList.contains('save-job-btn')) return;
-                
-                const button = e.target;
-                const card = button.closest('.job-card');
-                const jobId = parseInt(card.dataset.jobId);
-                
-                // Find job in the main array and toggle its saved state
-                const job = allJobs.find(j => j.id === jobId);
+                    <div class="skills-tags">${job.skills.map(skill => `<span>${skill}</span>`).join('')}</div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary">Apply</button>
+                        <button class="btn btn-secondary save-job-btn ${job.saved ? 'saved' : ''}">
+                            <i class="${job.saved ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i> ${job.saved ? 'Saved' : 'Save Job'}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            function renderJobs() {
+                jobGrid.innerHTML = allJobs.slice(0, jobsToDisplay).map(createJobCard).join('');
+                loadMoreBtn.style.display = jobsToDisplay >= allJobs.length ? 'none' : 'inline-block';
+            }
+
+            jobGrid.addEventListener('click', (e) => {
+                const button = e.target.closest('.save-job-btn');
+                if (!button) return;
+                const jobCard = button.closest('.job-card');
+                const job = allJobs.find(j => j.id === parseInt(jobCard.dataset.jobId));
                 if (job) {
                     job.saved = !job.saved;
-                    
-                    // Update button appearance
                     button.classList.toggle('saved');
-                    button.innerHTML = job.saved 
-                        ? '<i class="fa-solid fa-bookmark"></i> Saved' 
-                        : '<i class="fa-regular fa-bookmark"></i> Save Job';
+                    button.innerHTML = `<i class="${job.saved ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i> ${job.saved ? 'Saved' : 'Save Job'}`;
                 }
-            };
-            
-            const handleLoadMore = () => {
+            });
+
+            loadMoreBtn.addEventListener('click', () => {
                 jobsToDisplay += 4;
                 renderJobs();
-            };
+            });
 
-            // --- EVENT LISTENERS ---
-            jobGrid.addEventListener('click', handleSaveJobClick);
-            loadMoreBtn.addEventListener('click', handleLoadMore);
-
-            // --- INITIALIZATION ---
             renderJobs();
+        });
+
+        // --- ✅ MOBILE MENU TOGGLE ---
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.main-nav ul');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-xmark');
+            });
         });
     </script>
 </body>
 </html>
-

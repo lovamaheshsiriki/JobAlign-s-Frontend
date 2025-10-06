@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
     <style>
         /* 1. Global Reset and Variables */
         :root {
@@ -66,6 +66,24 @@
         }
         .profile-icon img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
         .menu-toggle { display: block; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-dark); }
+        
+        /* ✅ START: ADDED FOR MOBILE MENU */
+        .main-nav ul.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background-color: var(--color-white);
+            width: 200px;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            gap: 1rem;
+            z-index: 1001;
+        }
+        /* ✅ END: ADDED FOR MOBILE MENU */
+
         @media (min-width: 992px) {
             .main-nav ul { display: flex; }
             .menu-toggle { display: none; }
@@ -199,7 +217,6 @@
 
     <main class="container">
         <div class="profile-layout">
-            <!-- Left Column: Profile Summary -->
             <aside>
                 <div class="card profile-summary-card">
                     <div class="company-logo">
@@ -215,7 +232,6 @@
                 </div>
             </aside>
 
-            <!-- Right Column: Profile Details Form -->
             <section>
                 <form class="card" id="profile-form">
                     <div class="card-header">
@@ -346,6 +362,30 @@
             // --- INITIALIZATION ---
             populateProfile(recruiterData);
         });
+
+        // --- ✅ START: ADDED MOBILE MENU TOGGLE SCRIPT ---
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.main-nav ul');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                // Only remove active class if the menu is actually open
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-xmark');
+                }
+            });
+        });
+        // --- ✅ END: ADDED MOBILE MENU TOGGLE SCRIPT ---
     </script>
 </body>
 </html>

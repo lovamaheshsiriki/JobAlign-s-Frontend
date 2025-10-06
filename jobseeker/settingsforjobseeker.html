@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
     <style>
         /* 1. Global Reset and Variables */
         :root {
@@ -59,6 +59,24 @@
         }
         .profile-icon img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
         .menu-toggle { display: block; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-dark); }
+        
+        /* ✅ START: ADDED FOR MOBILE MENU */
+        .main-nav ul.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background-color: var(--color-white);
+            width: 200px;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            gap: 1rem;
+            z-index: 1001;
+        }
+        /* ✅ END: ADDED FOR MOBILE MENU */
+
         @media (min-width: 768px) {
             .main-nav ul { display: flex; }
             .menu-toggle { display: none; }
@@ -209,7 +227,6 @@
 
     <main class="container">
         <div class="settings-layout">
-            <!-- Sidebar Navigation -->
             <aside class="settings-nav" id="settings-nav">
                 <a href="#account" class="active">Account</a>
                 <a href="#notifications">Notifications</a>
@@ -218,16 +235,13 @@
                 <a href="#danger-zone">Danger Zone</a>
             </aside>
 
-            <!-- Content Area -->
             <div class="settings-content" id="settings-content">
-                <!-- Account Settings -->
                 <div id="account" class="card active">
                     <div class="card-header">
                         <h2>Account Settings</h2>
                         <p>Manage your account details and password.</p>
                     </div>
                     <div class="card-body">
-                        <!-- Change Email -->
                         <div class="setting-item">
                             <div class="setting-item-info">
                                 <h3>Email Address</h3>
@@ -240,7 +254,6 @@
                                 </form>
                             </div>
                         </div>
-                        <!-- Change Password -->
                         <div class="setting-item">
                             <div class="setting-item-info">
                                 <h3>Password</h3>
@@ -263,7 +276,6 @@
                     </div>
                 </div>
 
-                <!-- Notifications Settings -->
                 <div id="notifications" class="card">
                     <div class="card-header">
                         <h2>Notification Preferences</h2>
@@ -300,7 +312,6 @@
                     </div>
                 </div>
 
-                <!-- Privacy Settings -->
                 <div id="privacy" class="card">
                     <div class="card-header">
                         <h2>Privacy Settings</h2>
@@ -328,8 +339,7 @@
                     </div>
                 </div>
                 
-                 <!-- Security Settings -->
-                <div id="security" class="card">
+                 <div id="security" class="card">
                     <div class="card-header">
                         <h2>Security</h2>
                         <p>Enhance your account's security.</p>
@@ -347,7 +357,6 @@
                     </div>
                 </div>
 
-                <!-- Danger Zone -->
                 <div id="danger-zone" class="card danger-zone">
                      <div class="card-header">
                         <h2>Danger Zone</h2>
@@ -368,7 +377,6 @@
         </div>
     </main>
     
-    <!-- Delete Account Modal -->
     <div id="delete-confirm-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -463,12 +471,36 @@
             
             // Close modal if clicked outside
              window.addEventListener('click', (event) => {
-                if (event.target == deleteModal) {
-                    deleteModal.style.display = 'none';
-                }
-            });
+                 if (event.target == deleteModal) {
+                     deleteModal.style.display = 'none';
+                 }
+             });
 
         });
+
+        // --- ✅ START: ADDED MOBILE MENU TOGGLE SCRIPT ---
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.main-nav ul');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                // Only remove active class if the menu is actually open
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-xmark');
+                }
+            });
+        });
+        // --- ✅ END: ADDED MOBILE MENU TOGGLE SCRIPT ---
     </script>
 </body>
 </html>

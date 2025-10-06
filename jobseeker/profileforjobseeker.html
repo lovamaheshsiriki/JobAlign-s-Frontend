@@ -72,6 +72,24 @@
         }
         .profile-icon img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
         .menu-toggle { display: block; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-dark); }
+        
+        /* ✅ START: ADDED FOR MOBILE MENU */
+        .main-nav ul.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background-color: var(--color-white);
+            width: 200px;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            gap: 1rem;
+            z-index: 1001;
+        }
+        /* ✅ END: ADDED FOR MOBILE MENU */
+
         @media (min-width: 768px) {
             .main-nav ul { display: flex; }
             .menu-toggle { display: none; }
@@ -205,9 +223,7 @@
 
     <main class="container">
         <div class="profile-layout">
-            <!-- Left Column -->
             <div class="main-column">
-                <!-- Profile Header -->
                 <div class="card profile-header-card">
                     <div class="profile-picture">
                         <img src="../data/images/mahi.jpg" alt="Mahesh" id="profile-pic-img">
@@ -225,56 +241,46 @@
                     <button class="btn btn-primary edit-profile-btn" data-action="open-modal" data-modal-id="edit-profile-modal">Edit Profile</button>
                 </div>
                 
-                <!-- About Card -->
                 <div class="card">
                     <div class="card-header"><h2>About</h2></div>
                     <p id="profile-about">Passionate about data science and machine learning, with strong skills in SQL and Python. Eager to apply knowledge to real-world challenges.</p>
                 </div>
 
-                <!-- Skills Card -->
                 <div class="card">
                     <div class="card-header">
                         <h2>Skills</h2>
                         <button class="btn btn-secondary" data-action="open-modal" data-modal-id="add-skill-modal">+ Add Skill</button>
                     </div>
                     <div class="skills-list" id="skills-list-container">
-                        <!-- Skills will be rendered here -->
-                    </div>
+                        </div>
                 </div>
 
-                <!-- Experience Card -->
                 <div class="card">
                     <div class="card-header">
                         <h2>Experience</h2>
                         <button class="btn btn-secondary" data-action="open-modal" data-modal-id="experience-modal">+ Add Experience</button>
                     </div>
                     <div id="experience-list-container">
-                        <!-- Experience items will be rendered here -->
-                    </div>
+                        </div>
                 </div>
 
-                <!-- Education Card -->
                 <div class="card">
                     <div class="card-header">
                         <h2>Education</h2>
                         <button class="btn btn-secondary" data-action="open-modal" data-modal-id="education-modal">+ Add Education</button>
                     </div>
                     <div id="education-list-container">
-                        <!-- Education items will be rendered here -->
-                    </div>
+                        </div>
                 </div>
             </div>
 
-            <!-- Right Column -->
             <div class="sidebar-column">
-                <!-- Resume Card -->
                 <div class="card resume-card">
                     <div class="card-header"><h2>Resume</h2></div>
                     <button class="btn btn-primary">View Resume</button>
                     <button class="btn btn-secondary">Upload/Update Resume</button>
                 </div>
 
-                <!-- Settings Card -->
                 <div class="card">
                     <div class="card-header"><h2>Settings</h2></div>
                     <div class="settings-list">
@@ -308,8 +314,6 @@
         </div>
     </main>
     
-    <!-- Modals -->
-    <!-- Edit Profile Modal -->
     <div id="edit-profile-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -345,7 +349,6 @@
         </div>
     </div>
     
-    <!-- Experience Modal -->
     <div id="experience-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -378,7 +381,6 @@
         </div>
     </div>
 
-    <!-- Education Modal -->
     <div id="education-modal" class="modal">
          <div class="modal-content">
             <div class="modal-header">
@@ -407,7 +409,6 @@
         </div>
     </div>
 
-    <!-- Add Skill Modal -->
     <div id="add-skill-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -681,6 +682,30 @@
             // --- INITIALIZATION ---
             renderProfile();
         });
+
+        // --- ✅ START: ADDED MOBILE MENU TOGGLE SCRIPT ---
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.main-nav ul');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                // Only remove active class if the menu is actually open
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-xmark');
+                }
+            });
+        });
+        // --- ✅ END: ADDED MOBILE MENU TOGGLE SCRIPT ---
     </script>
 </body>
 </html>

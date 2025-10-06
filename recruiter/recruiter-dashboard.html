@@ -71,6 +71,24 @@
         }
         .profile-icon img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
         .menu-toggle { display: block; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-dark); }
+        
+        /* ✅ START: ADDED FOR MOBILE MENU */
+        .main-nav ul.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background-color: var(--color-white);
+            width: 200px;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            gap: 1rem;
+            z-index: 1001;
+        }
+        /* ✅ END: ADDED FOR MOBILE MENU */
+        
         @media (min-width: 992px) {
             .main-nav ul { display: flex; }
             .menu-toggle { display: none; }
@@ -161,7 +179,7 @@
         }
         .status-active { background-color: var(--color-success); color: var(--color-white); }
         .status-closed { background-color: var(--color-danger-bg); color: var(--color-danger-text); }
-        .status-pending { background-color: var(--color-warning); color: var(--color-white); }
+        .status-pending, .status-shortlisted { background-color: var(--color-warning); color: var(--color-white); }
 
     </style>
 </head>
@@ -185,20 +203,15 @@
     </header>
 
     <main class="container">
-        <!-- Welcome Banner -->
         <div class="welcome-banner">
             <h1>Welcome back, Tech Solutions Inc.</h1>
             <p>Here's a summary of your recruitment activity.</p>
         </div>
 
-        <!-- Quick Stats -->
         <div class="stats-grid" id="stats-grid">
-            <!-- Stats cards will be rendered by JS -->
-        </div>
+            </div>
 
-        <!-- Recent Jobs & Applicants -->
         <div class="dashboard-grid">
-            <!-- Recent Job Posts -->
             <div class="card">
                 <div class="card-header">
                     <h2>Recent Job Posts</h2>
@@ -214,13 +227,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Job rows will be rendered by JS -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Recent Applicants -->
             <div class="card">
                 <div class="card-header">
                     <h2>Recent Applicants</h2>
@@ -236,8 +247,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Applicant rows will be rendered by JS -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
@@ -326,6 +336,30 @@
             renderRecentJobs();
             renderRecentApplicants();
         });
+
+        // --- ✅ START: ADDED MOBILE MENU TOGGLE SCRIPT ---
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.main-nav ul');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                // Only remove active class if the menu is actually open
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-xmark');
+                }
+            });
+        });
+        // --- ✅ END: ADDED MOBILE MENU TOGGLE SCRIPT ---
     </script>
 </body>
 </html>

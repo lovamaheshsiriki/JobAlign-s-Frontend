@@ -7,19 +7,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+    <link rel="stylesheet" href="../data/font/fontawesome-free-7.1.0-web/css/all.min.css">
+
     <style>
         /* 1. Global Reset and Variables */
         :root {
-            --color-primary: #2563EB; /* Blue accent */
+            --color-primary: #2563EB;
             --color-primary-light: #EFF6FF;
-            --color-dark: #0F172A;   /* Dark Blue/Black for text */
-            --color-secondary: #64748B; /* Gray for body text */
-            --color-light: #F1F5F9;   /* Light gray for backgrounds */
+            --color-dark: #0F172A;
+            --color-secondary: #64748B;
+            --color-light: #F1F5F9;
             --color-white: #FFFFFF;
             --color-border: #E2E8F0;
             --color-success: #22C55E;
-            
+
             --font-family-sans: 'Inter', sans-serif;
             --border-radius: 0.75rem;
             --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -159,6 +160,22 @@
             gap: 1.5rem;
         }
 
+        /* Visible menu when active (for mobile) */
+        .main-nav ul.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background-color: var(--color-white);
+            width: 200px;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            gap: 1rem;
+            z-index: 1001;
+        }
+
         .main-nav a {
             font-weight: 500;
             color: var(--color-secondary);
@@ -168,7 +185,7 @@
         .main-nav a:hover, .main-nav a.active {
             color: var(--color-primary);
         }
-        
+
         .menu-toggle {
             display: block;
             font-size: 1.5rem;
@@ -200,7 +217,7 @@
             align-items: center;
             margin-bottom: 1rem;
         }
-        
+
         .profile-completion h3 {
             color: var(--color-dark);
             font-weight: 600;
@@ -210,7 +227,7 @@
             font-weight: 700;
             color: var(--color-dark);
         }
-        
+
         .progress-bar {
             width: 100%;
             height: 10px;
@@ -223,17 +240,17 @@
             height: 100%;
             background-color: var(--color-primary);
             border-radius: 5px;
-            width: 0%; /* JS will set this */
+            width: 0%;
             transition: width 0.5s ease-in-out;
         }
-        
+
         /* Job Recommendations */
         .job-recommendations h2 {
             font-size: 1.5rem;
             color: var(--color-dark);
             margin-bottom: 1.5rem;
         }
-        
+
         .filters {
             display: flex;
             flex-wrap: wrap;
@@ -248,21 +265,17 @@
             padding: 0.5rem 1rem;
         }
 
-        .filters .btn i {
-            margin-left: 0.5rem;
-        }
-
         .filters .btn:hover {
             border-color: var(--color-primary);
             color: var(--color-primary);
         }
-        
+
         .job-listings {
             display: grid;
             grid-template-columns: 1fr;
             gap: 1.5rem;
         }
-        
+
         @media (min-width: 768px) {
             .job-listings { grid-template-columns: repeat(2, 1fr); }
         }
@@ -281,12 +294,12 @@
             color: var(--color-dark);
             font-size: 1.125rem;
         }
-        
+
         .job-card .company {
             font-weight: 500;
             margin-bottom: 1rem;
         }
-        
+
         .job-details {
             list-style: none;
             margin-bottom: 1.5rem;
@@ -295,7 +308,7 @@
         .job-details li {
             margin-bottom: 0.5rem;
         }
-        
+
         .job-card .apply-btn {
             width: 100%;
         }
@@ -320,7 +333,7 @@
             padding: 0.75rem 0;
             border-bottom: 1px solid var(--color-border);
         }
-        
+
         .applications-list li:last-child, .notifications-list li:last-child {
             border-bottom: none;
         }
@@ -345,7 +358,7 @@
             font-weight: 500;
             margin-bottom: 1rem;
         }
-        
+
         .resume-status i {
             color: var(--color-success);
         }
@@ -368,7 +381,7 @@
         .notifications-list p {
             font-size: 0.9rem;
         }
-        
+
         .notifications-list .time {
             font-size: 0.8rem;
             color: var(--color-secondary);
@@ -427,8 +440,7 @@
                         <button class="btn"><i class="fa-solid fa-wallet"></i> Salary</button>
                         <button class="btn">Skills <i class="fa-solid fa-chevron-down"></i></button>
                     </div>
-                    <div class="job-listings" id="job-listings">
-                        </div>
+                    <div class="job-listings" id="job-listings"></div>
                 </section>
             </div>
 
@@ -459,8 +471,7 @@
 
                 <div class="notifications card">
                     <h3>Notifications</h3>
-                    <ul class="notifications-list" id="notifications-list">
-                        </ul>
+                    <ul class="notifications-list" id="notifications-list"></ul>
                 </div>
             </aside>
         </main>
@@ -468,7 +479,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- MOCK DATA ---
             const userName = "Mahesh";
             const profileCompletion = 80;
 
@@ -480,60 +490,31 @@
             };
 
             const jobRecommendations = [
-                {
-                    title: "Front End Developer",
-                    company: "Zerodha",
-                    location: "Hyderabad",
-                    salary: "2L - 4L",
-                    skills: "React, JavaScript, CSS",
-                },
-                {
-                    title: "Data Analyst",
-                    company: "Paytm",
-                    location: "Vizag",
-                    salary: "6L",
-                    skills: "SQL, Python, Tableau",
-                },
-                {
-                    title: "UI/UX Designer",
-                    company: "Swiggy",
-                    location: "Bangalore",
-                    salary: "5L - 8L",
-                    skills: "Figma, Adobe XD, Sketch",
-                },
-                {
-                    title: "Backend Engineer",
-                    company: "Google",
-                    location: "Remote",
-                    salary: "10L - 15L",
-                    skills: "Node.js, Go, Kubernetes",
-                }
+                { title: "Front End Developer", company: "Zerodha", location: "Hyderabad", salary: "2L - 4L", skills: "React, JavaScript, CSS" },
+                { title: "Data Analyst", company: "Paytm", location: "Vizag", salary: "6L", skills: "SQL, Python, Tableau" },
+                { title: "UI/UX Designer", company: "Swiggy", location: "Bangalore", salary: "5L - 8L", skills: "Figma, Adobe XD, Sketch" },
+                { title: "Backend Engineer", company: "Google", location: "Remote", salary: "10L - 15L", skills: "Node.js, Go, Kubernetes" }
             ];
-            
+
             const notifications = [
                 { message: 'Your application for Data Analyst was viewed.', time: '2h ago' },
                 { message: 'New jobs matching your profile are available.', time: '1d ago' },
                 { message: 'Welcome to JobAlign! Complete your profile.', time: '3d ago' },
             ];
 
-            // --- DOM Elements ---
             const profileProgress = document.getElementById('profile-progress');
             const profilePercentage = document.getElementById('profile-percentage');
             const jobListingsContainer = document.getElementById('job-listings');
             const pendingCountEl = document.getElementById('pending-count');
             const notificationsListEl = document.getElementById('notifications-list');
 
-            // --- FUNCTIONS ---
-
-            // 1. Update Profile Completion Bar
             function updateProfileCompletion(percentage) {
                 profilePercentage.textContent = `${percentage}%`;
                 profileProgress.style.width = `${percentage}%`;
             }
 
-            // 2. Render Job Recommendations
             function renderJobCards() {
-                jobListingsContainer.innerHTML = ''; // Clear existing listings
+                jobListingsContainer.innerHTML = '';
                 jobRecommendations.forEach(job => {
                     const jobCard = document.createElement('div');
                     jobCard.className = 'card job-card';
@@ -550,17 +531,14 @@
                     jobListingsContainer.appendChild(jobCard);
                 });
             }
-            
-            // 3. Update Application Counters
+
             function updateApplicationCounts() {
                 pendingCountEl.textContent = applicationStatus.pending;
-                // You can update other statuses similarly
                 document.getElementById('shortlisted-count').textContent = applicationStatus.shortlisted;
                 document.getElementById('rejected-count').textContent = applicationStatus.rejected;
                 document.getElementById('selected-count').textContent = applicationStatus.selected;
             }
-            
-            // 4. Render Notifications
+
             function renderNotifications() {
                 notificationsListEl.innerHTML = '';
                 notifications.forEach(notif => {
@@ -573,32 +551,40 @@
                 });
             }
 
-            // --- EVENT LISTENERS ---
-
-            // Handle "Apply" button clicks using event delegation
-            jobListingsContainer.addEventListener('click', (event) => {
-                if (event.target.classList.contains('apply-btn')) {
-                    const jobTitle = event.target.dataset.jobTitle;
-                    
-                    // Show confirmation alert
-                    alert(`Application submitted for ${jobTitle}`);
-                    
-                    // Update application status and UI
-                    applicationStatus.pending++;
-                    updateApplicationCounts();
+            // Apply button event
+            jobListingsContainer.addEventListener('click', e => {
+                if (e.target.classList.contains('apply-btn')) {
+                    const jobTitle = e.target.dataset.jobTitle;
+                    alert(`Application submitted for ${jobTitle}!`);
                 }
             });
 
-            // --- INITIALIZATION ---
-            function initializeDashboard() {
-                document.querySelector('.welcome-header h1').innerHTML = `Hello ${userName} 👋`;
-                updateProfileCompletion(profileCompletion);
-                renderJobCards();
-                updateApplicationCounts();
-                renderNotifications();
-            }
+            // Initialize dashboard
+            updateProfileCompletion(profileCompletion);
+            renderJobCards();
+            updateApplicationCounts();
+            renderNotifications();
+        });
 
-            initializeDashboard();
+        // --- MOBILE MENU TOGGLE ---
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.main-nav ul');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        // Close menu on link click (mobile)
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-xmark');
+            });
         });
     </script>
 </body>
